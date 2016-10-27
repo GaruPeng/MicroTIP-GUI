@@ -10,7 +10,6 @@
 class SerialCommunication
 {
 public:
-    SerialCommunication();
     SerialCommunication(QString port, qint32 baudrate);
     ~SerialCommunication();
     static QStringList getSerialNames();

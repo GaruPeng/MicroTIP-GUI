@@ -1,9 +1,5 @@
 #include "SerialCommunication.h"
 
-SerialCommunication::SerialCommunication()
-{
-}
-
 SerialCommunication::SerialCommunication(QString portName, qint32 baudRate)
 {
     configure(baudRate, portName);
