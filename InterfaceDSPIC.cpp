@@ -65,7 +65,8 @@ void InterfaceDSPIC::on_btnCloseCommunicationWithMicrocontroller_clicked()
 void InterfaceDSPIC::on_btnSendMessage_clicked()
 {
     ui->teReceivedInformation->append(QString("Sent : " + ui->leMessageToSend->text()));
-    ui->teReceivedInformation->append(QString("Received : "));
+    serial->sendMessage(ui->leMessageToSend->text().toLocal8Bit());
+    ui->teReceivedInformation->append(QString("Received : " + serial->receiveMessage()));
 }
 
 void InterfaceDSPIC::on_btnClearTeReceivedInformation_clicked()

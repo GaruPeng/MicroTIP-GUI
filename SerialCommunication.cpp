@@ -67,3 +67,22 @@ void SerialCommunication::close()
         serialPort.close();
     }
 }
+
+void SerialCommunication::sendMessage(QByteArray messageToSend)
+{
+    if((serialPort.isOpen()==true) &
+       (!messageToSend.isEmpty()))
+    {
+        serialPort.write(messageToSend);
+    }
+}
+
+QByteArray SerialCommunication::receiveMessage()
+{
+    QByteArray message;
+    while(serialPort.waitForReadyRead(10))
+    {
+        message.append(QString(serialPort.readAll()));
+    }
+    return message;
+}

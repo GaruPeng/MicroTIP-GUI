@@ -14,6 +14,8 @@ public:
     ~SerialCommunication();
     static QStringList getSerialNames();
     static QStringList getBaudRates();
+    void sendMessage(QByteArray messageToSend);
+    QByteArray receiveMessage();
 private:
     void configure(qint32 baudrate, QString portName);
     void open();
