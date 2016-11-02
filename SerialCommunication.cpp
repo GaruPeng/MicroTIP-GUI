@@ -35,7 +35,7 @@ QStringList SerialCommunication::getBaudRates()
     baudRates << "2400";
     baudRates << "4800";
     baudRates << "9600";
-    baudRates << "19200";;
+    baudRates << "19200";
     baudRates << "38400";
     baudRates << "57600";
     baudRates << "115200";
