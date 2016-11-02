@@ -70,7 +70,7 @@ void SerialCommunication::close()
 
 void SerialCommunication::sendMessage(QByteArray messageToSend)
 {
-    if((serialPort.isOpen()==true) &
+    if((serialPort.isOpen()==true) &&
        (!messageToSend.isEmpty()))
     {
         serialPort.write(messageToSend);
