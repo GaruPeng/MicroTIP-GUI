@@ -16,12 +16,15 @@ class InterfaceDSPIC : public QDialog
 public:
     explicit InterfaceDSPIC(QWidget *parent = 0);
     ~InterfaceDSPIC();
+    void init();
     void updateSerialPorts();
     void updateBaudrates();
 public slots:
     void on_btnRefreshSerialNames_clicked();
     void on_btnOpenCommunicationWithMicrocontroller_clicked();
     void on_btnCloseCommunicationWithMicrocontroller_clicked();
+    void on_btnSendMessage_clicked();
+    void on_btnClearTeReceivedInformation_clicked();
 private:
     Ui::InterfaceDSPIC *ui;
     SerialCommunication *serial;
