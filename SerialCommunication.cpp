@@ -2,13 +2,13 @@
 
 SerialCommunication::SerialCommunication(QString portName, qint32 baudRate)
 {
-    configure(baudRate, portName);
-    open();
+    this->configure(baudRate, portName);
+    this->open();
 }
 
 SerialCommunication::~SerialCommunication()
 {
-    close();
+    this->close();
 }
 
 QStringList SerialCommunication::getSerialNames()
