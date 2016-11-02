@@ -52,22 +52,18 @@ void SerialCommunication::configure(qint32 baudrate, QString portName)
     serialPort.setPortName(portName);
 }
 
-int SerialCommunication::open()
+void SerialCommunication::open()
 {
-    int error;
-
-    serialPort.open(QIODevice::ReadWrite);
-    error = serialPort.error();
-
-    return error;
+    if((!serialPort.isOpen()))
+    {
+        serialPort.open(QIODevice::ReadWrite);
+    }
 }
 
-int SerialCommunication::close()
+void SerialCommunication::close()
 {
-    int error;
-
-    serialPort.close();
-    error = serialPort.error();
-
-    return error;
+    if(serialPort.isOpen())
+    {
+        serialPort.close();
+    }
 }

@@ -16,8 +16,8 @@ public:
     static QStringList getBaudRates();
 private:
     void configure(qint32 baudrate, QString portName);
-    int open();
-    int close();
+    void open();
+    void close();
 public slots:
 
 signals:
