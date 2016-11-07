@@ -52,6 +52,7 @@ void InterfaceDSPIC::on_btnOpenCommunicationWithMicrocontroller_clicked()
     ui->gpbCommuniationEmissionReception->setEnabled(true);
     ui->btnOpenCommunicationWithMicrocontroller->setEnabled(false);
     ui->btnCloseCommunicationWithMicrocontroller->setEnabled(true);
+    connect(serial, SIGNAL(workDone(QByteArray)), this, SLOT(on_SerialCommunicationWorkDone(QByteArray)));
 }
 
 void InterfaceDSPIC::on_btnCloseCommunicationWithMicrocontroller_clicked()
@@ -65,11 +66,15 @@ void InterfaceDSPIC::on_btnCloseCommunicationWithMicrocontroller_clicked()
 void InterfaceDSPIC::on_btnSendMessage_clicked()
 {
     ui->teReceivedInformation->append(QString("Sent : " + ui->leMessageToSend->text()));
-    serial->sendMessage(ui->leMessageToSend->text().toLocal8Bit());
-    ui->teReceivedInformation->append(QString("Received : " + serial->receiveMessage()));
+    serial->sendMessage(QByteArray::fromHex(ui->leMessageToSend->text().toLocal8Bit()));
 }
 
 void InterfaceDSPIC::on_btnClearTeReceivedInformation_clicked()
 {
     ui->teReceivedInformation->clear();
+}
+
+void InterfaceDSPIC::on_SerialCommunicationWorkDone(QByteArray message)
+{
+    ui->teReceivedInformation->append(QString("Received : " + QString(message.toUpper())));
 }

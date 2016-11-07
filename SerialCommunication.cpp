@@ -75,6 +75,8 @@ void SerialCommunication::sendMessage(QByteArray messageToSend)
     {
         serialPort.write(messageToSend);
     }
+
+    this->configureReception();
 }
 
 QByteArray SerialCommunication::receiveMessage()
@@ -85,4 +87,43 @@ QByteArray SerialCommunication::receiveMessage()
         message.append(QString(serialPort.readAll()));
     }
     return message;
+}
+
+void SerialCommunication::configureReception()
+{
+    if(!receptionThread.isRunning())
+    {
+        QObject::connect(&receptionThread, SIGNAL(started()), this, SLOT(receive()));
+        receptionThread.start();
+        qDebug() << "Reception Thread Started" ;
+        this->moveToThread(&receptionThread);
+    }
+}
+
+void SerialCommunication::receive()
+{
+
+    while(1)
+    {
+        /* Append new data to messageBuffer */
+        if(serialPort.bytesAvailable() > 0)
+        {
+            messageBuffer.append(serialPort.readAll().toHex());
+
+        }
+
+        if(messageBuffer.size())
+        {
+            QString str = QString(messageBuffer.left(2));
+            bool isOk = false;
+            int taille = str.toInt(&isOk,16);
+            if(isOk && messageBuffer.size() == 2*taille)
+            {
+                emit workDone(messageBuffer.left(2*taille));
+                qDebug() << "work done";
+                messageBuffer.remove(0,2*taille);
+            }
+        }
+        thread()->msleep(10);
+    }
 }

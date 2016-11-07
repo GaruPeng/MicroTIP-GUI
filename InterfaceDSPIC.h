@@ -25,6 +25,7 @@ public slots:
     void on_btnCloseCommunicationWithMicrocontroller_clicked();
     void on_btnSendMessage_clicked();
     void on_btnClearTeReceivedInformation_clicked();
+    void on_SerialCommunicationWorkDone(QByteArray);
 private:
     Ui::InterfaceDSPIC *ui;
     SerialCommunication *serial;

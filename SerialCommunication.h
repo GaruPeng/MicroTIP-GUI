@@ -6,9 +6,11 @@
 #include <QSerialPort>
 #include <QThread>
 #include <QList>
+#include <QDebug>
 
-class SerialCommunication
+class SerialCommunication : public QObject
 {
+    Q_OBJECT
 public:
     SerialCommunication(QString port, qint32 baudrate);
     ~SerialCommunication();
@@ -20,8 +22,14 @@ private:
     void configure(qint32 baudrate, QString portName);
     void open();
     void close();
-private:
+    void configureReception();
     QSerialPort serialPort;
+    QThread receptionThread;
+    QByteArray messageBuffer;
+public slots:
+    void receive();
+signals:
+    void workDone(QByteArray);
 };
 
 #endif // SERIALCOMMUNICATION_H
