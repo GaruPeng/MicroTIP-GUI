@@ -20,11 +20,6 @@ private:
     void configure(qint32 baudrate, QString portName);
     void open();
     void close();
-public slots:
-
-signals:
-    void threadStarted();
-    void threadDone();
 private:
     QSerialPort serialPort;
 };
