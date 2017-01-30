@@ -26,6 +26,7 @@ private:
     QSerialPort serialPort;
     QThread receptionThread;
     QByteArray messageBuffer;
+    bool keepReceivingMessage;
 public slots:
     void receive();
 signals:

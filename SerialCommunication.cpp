@@ -62,9 +62,17 @@ void SerialCommunication::open()
 
 void SerialCommunication::close()
 {
+    if(receptionThread.isRunning())
+    {
+        keepReceivingMessage = false;
+        receptionThread.quit();
+        receptionThread.wait();
+        qDebug() << "Reception thread closed";
+    }
     if(serialPort.isOpen())
     {
         serialPort.close();
+        qDebug() << "Serial port closed";
     }
 }
 
@@ -96,34 +104,51 @@ void SerialCommunication::configureReception()
         QObject::connect(&receptionThread, SIGNAL(started()), this, SLOT(receive()));
         receptionThread.start();
         qDebug() << "Reception Thread Started" ;
+        keepReceivingMessage = true;
         this->moveToThread(&receptionThread);
     }
 }
 
 void SerialCommunication::receive()
 {
-
-    while(1)
+    bool processingMessage = false;
+    int messageSize = 0;
+    while(keepReceivingMessage)
     {
         /* Append new data to messageBuffer */
         if(serialPort.bytesAvailable() > 0)
         {
             messageBuffer.append(serialPort.readAll().toHex());
-
         }
 
         if(messageBuffer.size())
         {
-            QString str = QString(messageBuffer.left(2));
-            bool isOk = false;
-            int taille = str.toInt(&isOk,16);
-            if(isOk && messageBuffer.size() == 2*taille)
+            /* Compute message size */
+            if(!processingMessage)
             {
-                emit workDone(messageBuffer.left(2*taille));
-                qDebug() << "work done";
-                messageBuffer.remove(0,2*taille);
+                messageSize = 2 * QString(messageBuffer.left(2)).toInt(nullptr, 16);
+                if(messageSize>0)
+                {
+                    processingMessage = true;
+                }
+                else
+                {
+                    messageBuffer.remove(0,2);
+                    qDebug() << "Wrong message size";
+                }
             }
+            else if(messageBuffer.size() >= messageSize)
+            {
+                emit workDone(messageBuffer.left(messageSize));
+                qDebug() << "New message available: 0x" + messageBuffer.left(messageSize);
+                messageBuffer.remove(0,messageSize);
+                processingMessage = false;
+            }
+
+            /* Notify reception of new message */
+
         }
+
         thread()->msleep(10);
     }
 }
