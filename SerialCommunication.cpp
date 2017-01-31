@@ -59,6 +59,10 @@ void SerialCommunication::open()
         serialPort.open(QIODevice::ReadWrite);
         qDebug() << "Serial port opened";
     }
+    if(!receptionThread.isRunning())
+    {
+        this->configureReception();
+    }
 }
 
 void SerialCommunication::close()
@@ -84,8 +88,6 @@ void SerialCommunication::sendMessage(QByteArray messageToSend)
     {
         serialPort.write(messageToSend);
     }
-
-    this->configureReception();
 }
 
 QByteArray SerialCommunication::receiveMessage()
