@@ -63,6 +63,8 @@ void InterfaceDSPIC::on_btnCloseCommunicationWithMicrocontroller_clicked()
     ui->btnOpenCommunicationWithMicrocontroller->setEnabled(true);
     ui->btnCloseCommunicationWithMicrocontroller->setEnabled(false);
     ui->gpbCommuniationEmissionReception->setEnabled(false);
+    ui->teReceivedInformation->clear();
+    ui->leMessageToSend->clear();
 }
 
 void InterfaceDSPIC::on_btnSendMessage_clicked()
