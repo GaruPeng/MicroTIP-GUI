@@ -142,16 +142,15 @@ void SerialCommunication::receive()
             }
             else if(messageBuffer.size() >= messageSize)
             {
+                /* Notify reception of new message */
                 emit workDone(messageBuffer.left(messageSize));
                 qDebug() << "New message available: 0x" + messageBuffer.left(messageSize);
+
+                /* remove last received message from buffer */
                 messageBuffer.remove(0,messageSize);
                 processingMessage = false;
             }
-
-            /* Notify reception of new message */
-
         }
-
         thread()->msleep(10);
     }
 }
