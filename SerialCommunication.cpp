@@ -54,9 +54,10 @@ void SerialCommunication::configure(qint32 baudrate, QString portName)
 
 void SerialCommunication::open()
 {
-    if((!serialPort.isOpen()))
+    if(!serialPort.isOpen())
     {
         serialPort.open(QIODevice::ReadWrite);
+        qDebug() << "Serial port opened";
     }
 }
 
@@ -67,7 +68,7 @@ void SerialCommunication::close()
         keepReceivingMessage = false;
         receptionThread.quit();
         receptionThread.wait();
-        qDebug() << "Reception thread closed";
+        qDebug() << "Reception thread stopped";
     }
     if(serialPort.isOpen())
     {
@@ -103,7 +104,7 @@ void SerialCommunication::configureReception()
     {
         QObject::connect(&receptionThread, SIGNAL(started()), this, SLOT(receive()));
         receptionThread.start();
-        qDebug() << "Reception Thread Started" ;
+        qDebug() << "Reception thread started" ;
         keepReceivingMessage = true;
         this->moveToThread(&receptionThread);
     }
@@ -131,7 +132,7 @@ void SerialCommunication::receive()
                 {
                     processingMessage = true;
                 }
-                else
+                else /* messageSize = 0 cannot happen */
                 {
                     messageBuffer.remove(0,2);
                     qDebug() << "Wrong message size";

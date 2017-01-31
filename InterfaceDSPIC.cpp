@@ -19,10 +19,10 @@ InterfaceDSPIC::~InterfaceDSPIC()
 
 void InterfaceDSPIC::init()
 {
-    /* Hide Close Communication on startup */
+    /* Disable Close Communication on startup */
     ui->btnCloseCommunicationWithMicrocontroller->setEnabled(false);
 
-    /* Hide Emission/Reception groupbox on startup */
+    /* Disable Emission/Reception groupbox on startup */
     ui->gpbCommuniationEmissionReception->setEnabled(false);
 }
 
@@ -49,9 +49,11 @@ void InterfaceDSPIC::on_btnOpenCommunicationWithMicrocontroller_clicked()
 {
     serial = new SerialCommunication(ui->cmbSerialNames->currentText(),
                                      ui->cmbBaudRates->currentText().toInt());
+
     ui->gpbCommuniationEmissionReception->setEnabled(true);
     ui->btnOpenCommunicationWithMicrocontroller->setEnabled(false);
     ui->btnCloseCommunicationWithMicrocontroller->setEnabled(true);
+
     connect(serial, SIGNAL(workDone(QByteArray)), this, SLOT(on_SerialCommunicationWorkDone(QByteArray)));
 }
 
