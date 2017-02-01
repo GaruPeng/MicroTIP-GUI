@@ -116,6 +116,7 @@ void SerialCommunication::receive()
 {
     bool processingMessage = false;
     int messageSize = 0;
+    QElapsedTimer timeSinceFirstByteInMilliseconds;
     while(keepReceivingMessage)
     {
         /* Append new data to messageBuffer */
@@ -133,6 +134,7 @@ void SerialCommunication::receive()
                 if(messageSize>0)
                 {
                     processingMessage = true;
+                    timeSinceFirstByteInMilliseconds.start();
                 }
                 else /* messageSize = 0 cannot happen */
                 {
@@ -140,17 +142,24 @@ void SerialCommunication::receive()
                     qDebug() << "Wrong message size";
                 }
             }
+            else if(timeSinceFirstByteInMilliseconds.elapsed() > 5000)
+            {
+                qDebug() << "timeout";
+                qDebug() << "Discarded message was: 0x" + messageBuffer.left(messageSize);
+                messageBuffer.clear();
+                processingMessage = false;
+            }
             else if(messageBuffer.size() >= messageSize)
             {
                 /* Notify reception of new message */
                 emit workDone(messageBuffer.left(messageSize));
-                qDebug() << "New message available: 0x" + messageBuffer.left(messageSize);
+                qDebug() << "New message available: 0x" + messageBuffer.left(messageSize) + " (received in " << timeSinceFirstByteInMilliseconds.elapsed() << "ms).";
 
                 /* remove last received message from buffer */
                 messageBuffer.remove(0,messageSize);
                 processingMessage = false;
-            }
         }
-        thread()->msleep(10);
+        }
+        thread()->msleep(1);
     }
 }

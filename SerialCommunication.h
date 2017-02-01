@@ -7,6 +7,7 @@
 #include <QThread>
 #include <QList>
 #include <QDebug>
+#include <QElapsedTimer>
 
 class SerialCommunication : public QObject
 {
