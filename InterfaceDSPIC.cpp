@@ -53,6 +53,9 @@ void InterfaceDSPIC::on_btnOpenCommunicationWithMicrocontroller_clicked()
     ui->gpbCommuniationEmissionReception->setEnabled(true);
     ui->btnOpenCommunicationWithMicrocontroller->setEnabled(false);
     ui->btnCloseCommunicationWithMicrocontroller->setEnabled(true);
+    ui->btnRefreshSerialNames->setEnabled(false);
+    ui->cmbSerialNames->setEnabled(false);
+    ui->cmbBaudRates->setEnabled(false);
 
     connect(serial, SIGNAL(workDone(QByteArray)), this, SLOT(on_SerialCommunicationWorkDone(QByteArray)));
 }
@@ -63,6 +66,10 @@ void InterfaceDSPIC::on_btnCloseCommunicationWithMicrocontroller_clicked()
     ui->btnOpenCommunicationWithMicrocontroller->setEnabled(true);
     ui->btnCloseCommunicationWithMicrocontroller->setEnabled(false);
     ui->gpbCommuniationEmissionReception->setEnabled(false);
+    ui->btnRefreshSerialNames->setEnabled(true);
+    ui->cmbSerialNames->setEnabled(true);
+    ui->cmbBaudRates->setEnabled(true);
+
     ui->teReceivedInformation->clear();
     ui->leMessageToSend->clear();
 }
