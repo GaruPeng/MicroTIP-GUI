@@ -153,7 +153,7 @@ void SerialCommunication::receive()
             {
                 /* Notify reception of new message */
                 emit workDone(messageBuffer.left(messageSize));
-                qDebug() << "New message available: 0x" + messageBuffer.left(messageSize) + " (received in " << timeSinceFirstByteInMilliseconds.elapsed() << "ms).";
+                qDebug() << "New message available: 0x" + messageBuffer.left(messageSize) << "(received in" << timeSinceFirstByteInMilliseconds.elapsed() << "ms).";
 
                 /* remove last received message from buffer */
                 messageBuffer.remove(0,messageSize);
