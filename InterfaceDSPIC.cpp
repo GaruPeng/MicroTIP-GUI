@@ -83,6 +83,7 @@ void InterfaceDSPIC::on_btnSendMessage_clicked()
 void InterfaceDSPIC::on_btnClearTeReceivedInformation_clicked()
 {
     ui->teReceivedInformation->clear();
+    ui->leMessageToSend->clear();
 }
 
 void InterfaceDSPIC::on_SerialCommunicationWorkDone(QByteArray message)
