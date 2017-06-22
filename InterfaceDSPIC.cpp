@@ -80,8 +80,15 @@ void InterfaceDSPIC::on_btnCloseCommunicationWithMicrocontroller_clicked()
 
 void InterfaceDSPIC::on_btnSendMessage_clicked()
 {
-    ui->teConsole->append(QString("Sent : " + ui->leMessageToSend->text()));
-    serial->sendMessage(QByteArray::fromHex(ui->leMessageToSend->text().toLocal8Bit()));
+    if(ui->leMessageToSend->text().isEmpty())
+    {
+        QMessageBox::critical(this, "", "Cannot send empty message");
+    }
+    else
+    {
+        ui->teConsole->append(QString("Sent : " + ui->leMessageToSend->text()));
+        serial->sendMessage(QByteArray::fromHex(ui->leMessageToSend->text().toLocal8Bit()));
+    }
 }
 
 void InterfaceDSPIC::on_btnClearConsole_clicked()
