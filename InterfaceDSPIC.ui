@@ -29,30 +29,6 @@
          <bool>false</bool>
         </property>
         <layout class="QGridLayout" name="gridLayout_3">
-         <item row="0" column="0">
-          <widget class="QLabel" name="lblSerialNames">
-           <property name="text">
-            <string>Serial Port</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="lblBaudRates">
-           <property name="text">
-            <string>Baudrate (bps)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="QPushButton" name="btnRefreshSerialNames">
-           <property name="text">
-            <string>Refresh</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QComboBox" name="cmbSerialNames"/>
-         </item>
          <item row="1" column="1">
           <widget class="QComboBox" name="cmbBaudRates"/>
          </item>
@@ -63,6 +39,13 @@
            </property>
           </widget>
          </item>
+         <item row="0" column="2">
+          <widget class="QPushButton" name="btnRefreshSerialNames">
+           <property name="text">
+            <string>Refresh</string>
+           </property>
+          </widget>
+         </item>
          <item row="2" column="2">
           <widget class="QPushButton" name="btnCloseCommunicationWithMicrocontroller">
            <property name="text">
@@ -70,53 +53,70 @@
            </property>
           </widget>
          </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="5" column="0" colspan="2">
-       <widget class="QGroupBox" name="gpbCommuniationEmissionReception">
-        <property name="title">
-         <string>Emission / Reception</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_4">
-         <item row="2" column="0" colspan="4">
-          <widget class="QTextEdit" name="teReceivedInformation">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-           <property name="acceptRichText">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="0">
-          <widget class="QLineEdit" name="leMessageToSend">
-           <property name="minimumSize">
-            <size>
-             <width>50</width>
-             <height>0</height>
-            </size>
+          <widget class="QLabel" name="lblSerialNames">
+           <property name="text">
+            <string>Serial Port</string>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QPushButton" name="btnSendMessage">
-           <property name="text">
-            <string>Send</string>
-           </property>
-          </widget>
+          <widget class="QComboBox" name="cmbSerialNames"/>
          </item>
-         <item row="3" column="1">
-          <widget class="QPushButton" name="btnClearTeReceivedInformation">
+         <item row="1" column="0">
+          <widget class="QLabel" name="lblBaudRates">
            <property name="text">
-            <string>Clear</string>
+            <string>Baudrate (bps)</string>
            </property>
           </widget>
          </item>
         </layout>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLineEdit" name="leMessageToSend">
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QPushButton" name="btnSendMessage">
+        <property name="text">
+         <string>Send</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="gbpConsole">
+     <property name="title">
+      <string>Console</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="2" column="0" colspan="4">
+       <widget class="QTextEdit" name="teConsole">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="acceptRichText">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
+       <widget class="QPushButton" name="btnClearConsole">
+        <property name="text">
+         <string>Clear</string>
+        </property>
        </widget>
       </item>
      </layout>

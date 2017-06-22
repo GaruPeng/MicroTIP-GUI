@@ -23,7 +23,8 @@ void InterfaceDSPIC::init()
     ui->btnCloseCommunicationWithMicrocontroller->setEnabled(false);
 
     /* Disable Emission/Reception groupbox on startup */
-    ui->gpbCommuniationEmissionReception->setEnabled(false);
+    ui->leMessageToSend->setEnabled(false);
+    ui->btnSendMessage->setEnabled(false);
 }
 
 void InterfaceDSPIC::updateSerialPorts()
@@ -50,12 +51,14 @@ void InterfaceDSPIC::on_btnOpenCommunicationWithMicrocontroller_clicked()
     serial = new SerialCommunication(ui->cmbSerialNames->currentText(),
                                      ui->cmbBaudRates->currentText().toInt());
 
-    ui->gpbCommuniationEmissionReception->setEnabled(true);
     ui->btnOpenCommunicationWithMicrocontroller->setEnabled(false);
     ui->btnCloseCommunicationWithMicrocontroller->setEnabled(true);
     ui->btnRefreshSerialNames->setEnabled(false);
     ui->cmbSerialNames->setEnabled(false);
     ui->cmbBaudRates->setEnabled(false);
+
+    ui->btnSendMessage->setEnabled(true);
+    ui->leMessageToSend->setEnabled(true);
 
     connect(serial, SIGNAL(workDone(QByteArray)), this, SLOT(on_newMessage(QByteArray)));
 }
@@ -65,24 +68,25 @@ void InterfaceDSPIC::on_btnCloseCommunicationWithMicrocontroller_clicked()
     delete serial;
     ui->btnOpenCommunicationWithMicrocontroller->setEnabled(true);
     ui->btnCloseCommunicationWithMicrocontroller->setEnabled(false);
-    ui->gpbCommuniationEmissionReception->setEnabled(false);
     ui->btnRefreshSerialNames->setEnabled(true);
     ui->cmbSerialNames->setEnabled(true);
     ui->cmbBaudRates->setEnabled(true);
 
-    ui->teReceivedInformation->clear();
+    ui->btnSendMessage->setEnabled(false);
+    ui->leMessageToSend->setEnabled(false);
+
     ui->leMessageToSend->clear();
 }
 
 void InterfaceDSPIC::on_btnSendMessage_clicked()
 {
-    ui->teReceivedInformation->append(QString("Sent : " + ui->leMessageToSend->text()));
+    ui->teConsole->append(QString("Sent : " + ui->leMessageToSend->text()));
     serial->sendMessage(QByteArray::fromHex(ui->leMessageToSend->text().toLocal8Bit()));
 }
 
-void InterfaceDSPIC::on_btnClearTeReceivedInformation_clicked()
+void InterfaceDSPIC::on_btnClearConsole_clicked()
 {
-    ui->teReceivedInformation->clear();
+    ui->teConsole->clear();
     ui->leMessageToSend->clear();
 }
 
