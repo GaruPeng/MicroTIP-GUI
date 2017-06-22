@@ -57,7 +57,7 @@ void InterfaceDSPIC::on_btnOpenCommunicationWithMicrocontroller_clicked()
     ui->cmbSerialNames->setEnabled(false);
     ui->cmbBaudRates->setEnabled(false);
 
-    connect(serial, SIGNAL(workDone(QByteArray)), this, SLOT(on_SerialCommunicationWorkDone(QByteArray)));
+    connect(serial, SIGNAL(workDone(QByteArray)), this, SLOT(on_newMessage(QByteArray)));
 }
 
 void InterfaceDSPIC::on_btnCloseCommunicationWithMicrocontroller_clicked()
@@ -86,7 +86,7 @@ void InterfaceDSPIC::on_btnClearTeReceivedInformation_clicked()
     ui->leMessageToSend->clear();
 }
 
-void InterfaceDSPIC::on_SerialCommunicationWorkDone(QByteArray message)
+void InterfaceDSPIC::on_newMessage(QByteArray message)
 {
-    ui->teReceivedInformation->append(QString("Received : " + QString(message.toUpper())));
+
 }
