@@ -6,14 +6,43 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>374</width>
-    <height>323</height>
+    <width>618</width>
+    <height>359</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>InterfaceDSPIC</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="gbpConsole">
+     <property name="title">
+      <string>Console</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="2" column="0" colspan="4">
+       <widget class="QTextEdit" name="teConsole">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="acceptRichText">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
+       <widget class="QPushButton" name="btnClearConsole">
+        <property name="text">
+         <string>Clear</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QGroupBox" name="gpbCommunication">
      <property name="title">
@@ -93,31 +122,48 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QGroupBox" name="gbpConsole">
+   <item row="0" column="1">
+    <widget class="QGroupBox" name="gpbDac">
      <property name="title">
-      <string>Console</string>
+      <string>Dac</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_4">
-      <item row="2" column="0" colspan="4">
-       <widget class="QTextEdit" name="teConsole">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-        <property name="acceptRichText">
-         <bool>true</bool>
+     <layout class="QGridLayout" name="gridLayout_5">
+      <item row="0" column="2">
+       <widget class="QPushButton" name="btnDacGetValue">
+        <property name="text">
+         <string>Get</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="3">
-       <widget class="QPushButton" name="btnClearConsole">
+      <item row="0" column="0">
+       <widget class="QLabel" name="lblDacValue">
         <property name="text">
-         <string>Clear</string>
+         <string>Value</string>
         </property>
        </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="leDacValue"/>
+      </item>
+      <item row="0" column="3">
+       <widget class="QPushButton" name="btnDacSetValue">
+        <property name="text">
+         <string>Set</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <spacer name="vspDac">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </widget>

@@ -5,6 +5,7 @@
 #include <QMessageBox>
 
 #include "SerialCommunication.h"
+#include "Dac.h"
 
 namespace Ui {
 class InterfaceDSPIC;
@@ -29,6 +30,7 @@ public slots:
 private:
     Ui::InterfaceDSPIC *ui;
     SerialCommunication *serial;
+    Dac *dac;
 };
 
 #endif // INTERFACEDSPIC_H

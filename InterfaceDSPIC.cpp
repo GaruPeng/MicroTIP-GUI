@@ -25,6 +25,8 @@ void InterfaceDSPIC::init()
     /* Disable Emission/Reception groupbox on startup */
     ui->leMessageToSend->setEnabled(false);
     ui->btnSendMessage->setEnabled(false);
+
+    ui->gpbDac->setEnabled(false);
 }
 
 void InterfaceDSPIC::updateSerialPorts()
@@ -50,6 +52,7 @@ void InterfaceDSPIC::on_btnOpenCommunicationWithMicrocontroller_clicked()
 {
     serial = new SerialCommunication(ui->cmbSerialNames->currentText(),
                                      ui->cmbBaudRates->currentText().toInt());
+    dac = new Dac();
 
     ui->btnOpenCommunicationWithMicrocontroller->setEnabled(false);
     ui->btnCloseCommunicationWithMicrocontroller->setEnabled(true);
@@ -60,12 +63,16 @@ void InterfaceDSPIC::on_btnOpenCommunicationWithMicrocontroller_clicked()
     ui->btnSendMessage->setEnabled(true);
     ui->leMessageToSend->setEnabled(true);
 
+    ui->gpbDac->setEnabled(true);
+
     connect(serial, SIGNAL(workDone(QByteArray)), this, SLOT(on_newMessage(QByteArray)));
 }
 
 void InterfaceDSPIC::on_btnCloseCommunicationWithMicrocontroller_clicked()
 {
     delete serial;
+    delete dac;
+
     ui->btnOpenCommunicationWithMicrocontroller->setEnabled(true);
     ui->btnCloseCommunicationWithMicrocontroller->setEnabled(false);
     ui->btnRefreshSerialNames->setEnabled(true);
@@ -76,6 +83,8 @@ void InterfaceDSPIC::on_btnCloseCommunicationWithMicrocontroller_clicked()
     ui->leMessageToSend->setEnabled(false);
 
     ui->leMessageToSend->clear();
+
+    ui->gpbDac->setEnabled(false);
 }
 
 void InterfaceDSPIC::on_btnSendMessage_clicked()
