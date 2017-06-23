@@ -1,6 +1,6 @@
 #include "Dac.h"
 
-Dac::Dac()
+Dac::Dac() : value(0)
 {
 
 }
