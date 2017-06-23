@@ -38,7 +38,7 @@ private:
 typedef enum
 {
     CMD_DAC_SET_VALUE = 0x10,
-    CMD_GET_DAC_VALUE = 0x11
+    CMD_DAC_GET_VALUE = 0x11
 }CMD;
 
 #endif // INTERFACEDSPIC_H

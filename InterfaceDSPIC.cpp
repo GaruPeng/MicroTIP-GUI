@@ -113,7 +113,7 @@ void InterfaceDSPIC::on_newMessage(QByteArray message)
 
    switch(cmd)
    {
-   case CMD_GET_DAC_VALUE:
+   case CMD_DAC_GET_VALUE:
        dac->setValue(message.left(4).toInt(nullptr,16));
        ui->leDacValue->setText(QString::number(dac->getValue()));
        ui->teConsole->append("Current DAC value: " + ui->leDacValue->text());
@@ -132,7 +132,7 @@ void InterfaceDSPIC::on_btnDacGetValue_clicked()
     QByteArray messageToSend;
 
     messageToSend.append((char)0x02);
-    messageToSend.append((char)CMD_GET_DAC_VALUE);
+    messageToSend.append((char)CMD_DAC_GET_VALUE);
 
     serial->sendMessage(messageToSend);
 }
