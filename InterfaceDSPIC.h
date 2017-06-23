@@ -27,10 +27,16 @@ public slots:
     void on_btnSendMessage_clicked();
     void on_btnClearConsole_clicked();
     void on_newMessage(QByteArray);
+    void on_btnDacGetValue_clicked();
 private:
     Ui::InterfaceDSPIC *ui;
     SerialCommunication *serial;
     Dac *dac;
 };
+
+enum
+{
+    CMD_GET_DAC_VALUE = 0x11
+}CMD;
 
 #endif // INTERFACEDSPIC_H

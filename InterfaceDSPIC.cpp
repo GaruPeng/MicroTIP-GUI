@@ -110,3 +110,16 @@ void InterfaceDSPIC::on_newMessage(QByteArray message)
 {
 
 }
+
+void InterfaceDSPIC::on_btnDacGetValue_clicked()
+{
+    qDebug() << "Getting Dac Value";
+
+    ui->teConsole->append("Retrieving DAC current value ...");
+    QByteArray messageToSend;
+
+    messageToSend.append((char)0x02);
+    messageToSend.append((char)CMD_GET_DAC_VALUE);
+
+    serial->sendMessage(messageToSend);
+}
