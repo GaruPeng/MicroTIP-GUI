@@ -15,10 +15,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         InterfaceDSPIC.cpp \
     SerialCommunication.cpp \
-    Dac.cpp
+    Dac.cpp \
+    Multiplexer.cpp
 
 HEADERS  += InterfaceDSPIC.h \
     SerialCommunication.h \
-    Dac.h
+    Dac.h \
+    Multiplexer.h
 
 FORMS    += InterfaceDSPIC.ui
