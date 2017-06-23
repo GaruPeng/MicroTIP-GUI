@@ -1,6 +1,6 @@
 #include "Multiplexer.h"
 
-Multiplexer::Multiplexer()
+Multiplexer::Multiplexer() : input(0)
 {
 
 }

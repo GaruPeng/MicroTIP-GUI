@@ -6,6 +6,8 @@ class Multiplexer
 {
 public:
     Multiplexer();
+private :
+    char input;
 };
 
 #endif // MULTIPLEXER_H
