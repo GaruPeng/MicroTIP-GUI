@@ -151,6 +151,8 @@ void SerialCommunication::receive()
             }
             else if(messageBuffer.size() >= messageSize)
             {
+                /* Remove size from message */
+                messageBuffer.remove(0,2);
                 /* Notify reception of new message */
                 emit workDone(messageBuffer.left(messageSize));
                 qDebug() << "New message available: 0x" + messageBuffer.left(messageSize) << "(received in" << timeSinceFirstByteInMilliseconds.elapsed() << "ms).";
