@@ -130,6 +130,10 @@ void InterfaceDSPIC::on_btnDacSetValue_clicked()
     {
         QMessageBox::critical(this,"DAC","Cannot set an empty value");
     }
+    else if(ui->leDacValue->text().toInt() > 65535)
+    {
+        QMessageBox::critical(this,"DAC","Cannot set a value > 65535");
+    }
     else
     {
        dac->setValue(ui->leDacValue->text().toInt());
