@@ -14,9 +14,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         InterfaceDSPIC.cpp \
-    SerialCommunication.cpp
+    SerialCommunication.cpp \
+    Dac.cpp
 
 HEADERS  += InterfaceDSPIC.h \
-    SerialCommunication.h
+    SerialCommunication.h \
+    Dac.h
 
 FORMS    += InterfaceDSPIC.ui
