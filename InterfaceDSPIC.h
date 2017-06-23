@@ -28,6 +28,7 @@ public slots:
     void on_btnClearConsole_clicked();
     void on_newMessage(QByteArray);
     void on_btnDacGetValue_clicked();
+    void on_btnDacSetValue_clicked();
 private:
     Ui::InterfaceDSPIC *ui;
     SerialCommunication *serial;
@@ -36,6 +37,7 @@ private:
 
 enum
 {
+    CMD_DAC_SET_VALUE = 0x10,
     CMD_GET_DAC_VALUE = 0x11
 }CMD;
 

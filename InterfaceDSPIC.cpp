@@ -123,3 +123,28 @@ void InterfaceDSPIC::on_btnDacGetValue_clicked()
 
     serial->sendMessage(messageToSend);
 }
+
+void InterfaceDSPIC::on_btnDacSetValue_clicked()
+{
+    if(ui->leDacValue->text().isEmpty())
+    {
+        QMessageBox::critical(this,"DAC","Cannot set an empty value");
+    }
+    else
+    {
+       dac->setValue(ui->leDacValue->text().toInt());
+
+       qDebug() << "Setting Dac Value";
+       ui->teConsole->append("Setting DAC value to " + QString::number(dac->getValue()));
+
+       QByteArray messageToSend;
+
+       messageToSend.append((char)0x04);
+       messageToSend.append((char)CMD_DAC_SET_VALUE);
+       messageToSend.append((char)(dac->getValue() >> 8));
+       messageToSend.append((char)dac->getValue());
+
+       serial->sendMessage(messageToSend);
+    }
+
+}
