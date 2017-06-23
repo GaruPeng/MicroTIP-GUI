@@ -6,6 +6,8 @@ class Multiplexer
 {
 public:
     Multiplexer();
+    void setInput(char input);
+    char getInput();
 private :
     char input;
 };
