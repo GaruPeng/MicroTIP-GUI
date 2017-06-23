@@ -35,7 +35,7 @@ private:
     Dac *dac;
 };
 
-enum
+typedef enum
 {
     CMD_DAC_SET_VALUE = 0x10,
     CMD_GET_DAC_VALUE = 0x11
