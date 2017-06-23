@@ -108,7 +108,20 @@ void InterfaceDSPIC::on_btnClearConsole_clicked()
 
 void InterfaceDSPIC::on_newMessage(QByteArray message)
 {
+   CMD cmd((CMD)QString(message.left(2)).toInt(nullptr,16));
+   message.remove(0,2);
 
+   switch(cmd)
+   {
+   case CMD_GET_DAC_VALUE:
+       dac->setValue(message.left(4).toInt(nullptr,16));
+       ui->leDacValue->setText(QString::number(dac->getValue()));
+       ui->teConsole->append("Current DAC value: " + ui->leDacValue->text());
+       message.clear();
+       break;
+   default:
+       break;
+   }
 }
 
 void InterfaceDSPIC::on_btnDacGetValue_clicked()
