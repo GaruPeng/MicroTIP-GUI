@@ -54,6 +54,8 @@ void InterfaceDSPIC::on_btnOpenCommunicationWithMicrocontroller_clicked()
                                      ui->cmbBaudRates->currentText().toInt());
     dac = new Dac();
 
+    mux = new Multiplexer();
+
     ui->btnOpenCommunicationWithMicrocontroller->setEnabled(false);
     ui->btnCloseCommunicationWithMicrocontroller->setEnabled(true);
     ui->btnRefreshSerialNames->setEnabled(false);
@@ -72,6 +74,7 @@ void InterfaceDSPIC::on_btnCloseCommunicationWithMicrocontroller_clicked()
 {
     delete serial;
     delete dac;
+    delete mux;
 
     ui->btnOpenCommunicationWithMicrocontroller->setEnabled(true);
     ui->btnCloseCommunicationWithMicrocontroller->setEnabled(false);
@@ -161,4 +164,15 @@ void InterfaceDSPIC::on_btnDacSetValue_clicked()
        serial->sendMessage(messageToSend);
     }
 
+}
+
+void InterfaceDSPIC::on_btgMux_buttonClicked(int id)
+{
+    QByteArray messageToSend;
+    messageToSend.append(0x03);
+    messageToSend.append(CMD_MUX_SET_VALUE);
+    mux->setInput((char)(-id-2));
+    messageToSend.append(mux->getInput());
+    serial->sendMessage(messageToSend);
+    ui->teConsole->append("Setting MUX input to : " + QString::number(mux->getInput()));
 }

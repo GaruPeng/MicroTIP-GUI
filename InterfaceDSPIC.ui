@@ -6,43 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>618</width>
-    <height>359</height>
+    <width>708</width>
+    <height>444</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>InterfaceDSPIC</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0">
-    <widget class="QGroupBox" name="gbpConsole">
-     <property name="title">
-      <string>Console</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_4">
-      <item row="2" column="0" colspan="4">
-       <widget class="QTextEdit" name="teConsole">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-        <property name="acceptRichText">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="3">
-       <widget class="QPushButton" name="btnClearConsole">
-        <property name="text">
-         <string>Clear</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item row="0" column="0">
     <widget class="QGroupBox" name="gpbCommunication">
      <property name="title">
@@ -122,6 +93,134 @@
      </layout>
     </widget>
    </item>
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="gbpConsole">
+     <property name="title">
+      <string>Console</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="2" column="0" colspan="4">
+       <widget class="QTextEdit" name="teConsole">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="acceptRichText">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
+       <widget class="QPushButton" name="btnClearConsole">
+        <property name="text">
+         <string>Clear</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QGroupBox" name="vlyMux">
+     <property name="title">
+      <string>Multiplexer</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QRadioButton" name="radMuxNoInput">
+        <property name="text">
+         <string>No input</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">btgMux</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radMuxInput1">
+        <property name="text">
+         <string>Input 1</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">btgMux</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radMuxInput2">
+        <property name="text">
+         <string>Input 2</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">btgMux</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radMuxInput3">
+        <property name="text">
+         <string>Input 3</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">btgMux</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radMuxInput4">
+        <property name="text">
+         <string>Input 4</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">btgMux</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radMuxInput5">
+        <property name="text">
+         <string>Input 5</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">btgMux</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radMuxInput6">
+        <property name="text">
+         <string>Input 6</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">btgMux</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radMuxInput7">
+        <property name="text">
+         <string>Input 7</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">btgMux</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radMuxInput8">
+        <property name="text">
+         <string>Input 8</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">btgMux</string>
+        </attribute>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="0" column="1">
     <widget class="QGroupBox" name="gpbDac">
      <property name="title">
@@ -173,4 +272,7 @@
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="btgMux"/>
+ </buttongroups>
 </ui>
