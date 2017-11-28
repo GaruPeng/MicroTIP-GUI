@@ -142,7 +142,7 @@ void SerialCommunication::receive()
                     qDebug() << "Wrong message size";
                 }
             }
-            else if(timeSinceFirstByteInMilliseconds.elapsed() > 5000)
+            else if(timeSinceFirstByteInMilliseconds.elapsed() > 100)
             {
                 qDebug() << "timeout";
                 qDebug() << "Discarded message was: 0x" + messageBuffer.left(messageSize);
@@ -152,7 +152,7 @@ void SerialCommunication::receive()
             else if(messageBuffer.size() >= messageSize)
             {
                 /* Remove size from message */
-                messageBuffer.remove(0,2);
+                //messageBuffer.remove(0,2);
                 /* Notify reception of new message */
                 emit workDone(messageBuffer.left(messageSize));
                 qDebug() << "New message available: 0x" + messageBuffer.left(messageSize) << "(received in" << timeSinceFirstByteInMilliseconds.elapsed() << "ms).";
