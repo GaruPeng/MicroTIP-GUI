@@ -9,13 +9,27 @@ InterfaceDSPIC::InterfaceDSPIC(QWidget *parent) :
     init();
     updateSerialPorts();
     updateBaudrates();
+
+    haptic = new Haptic();
+    timerPos = new QTimer;
+    timerPos->setInterval(1);
+    timerPos->start();
+    connect(timerPos,SIGNAL(timeout()),this,SLOT(showPosMonitor()));
+
+    /* Create a scope window */
+    scope = new Scope;
+    scope->setGeometry(50,50,700,300);
+    scope->show();
 }
+
 
 InterfaceDSPIC::~InterfaceDSPIC()
 {
     delete ui;
     delete serial;
+    delete haptic;
 }
+
 
 void InterfaceDSPIC::init()
 {
@@ -25,15 +39,26 @@ void InterfaceDSPIC::init()
     /* Disable Emission/Reception groupbox on startup */
     ui->leMessageToSend->setEnabled(false);
     ui->btnSendMessage->setEnabled(false);
-
     ui->gpbDac->setEnabled(false);
+
+    /* Disable Position Monitor on startup */
+    ui->spbPosQW->setEnabled(false);
+    ui->spbPosQX->setEnabled(false);
+    ui->spbPosQY->setEnabled(false);
+    ui->spbPosQZ->setEnabled(false);
+    ui->spbPosX->setEnabled(false);
+    ui->spbPosY->setEnabled(false);
+    ui->spbPosZ->setEnabled(false);
+
 }
+
 
 void InterfaceDSPIC::updateSerialPorts()
 {
     ui->cmbSerialNames->clear();
     ui->cmbSerialNames->addItems(SerialCommunication::getSerialNames());
 }
+
 
 void InterfaceDSPIC::updateBaudrates()
 {
@@ -42,16 +67,21 @@ void InterfaceDSPIC::updateBaudrates()
     ui->cmbBaudRates->setCurrentIndex(7);
 }
 
+
 void InterfaceDSPIC::on_btnRefreshSerialNames_clicked()
 {
     InterfaceDSPIC::updateSerialPorts();
     InterfaceDSPIC::updateBaudrates();
 }
 
+
 void InterfaceDSPIC::on_btnOpenCommunicationWithMicrocontroller_clicked()
 {
+
     serial = new SerialCommunication(ui->cmbSerialNames->currentText(),
                                      ui->cmbBaudRates->currentText().toInt());
+    ui->teConsole->append(serial->retext);
+
     dac = new Dac();
 
     mux = new Multiplexer();
@@ -68,6 +98,7 @@ void InterfaceDSPIC::on_btnOpenCommunicationWithMicrocontroller_clicked()
     ui->gpbDac->setEnabled(true);
 
     connect(serial, SIGNAL(workDone(QByteArray)), this, SLOT(on_newMessage(QByteArray)));
+
 }
 
 void InterfaceDSPIC::on_btnCloseCommunicationWithMicrocontroller_clicked()
@@ -90,6 +121,7 @@ void InterfaceDSPIC::on_btnCloseCommunicationWithMicrocontroller_clicked()
     ui->gpbDac->setEnabled(false);
 }
 
+
 void InterfaceDSPIC::on_btnSendMessage_clicked()
 {
     if(ui->leMessageToSend->text().isEmpty())
@@ -103,29 +135,37 @@ void InterfaceDSPIC::on_btnSendMessage_clicked()
     }
 }
 
+
 void InterfaceDSPIC::on_btnClearConsole_clicked()
 {
     ui->teConsole->clear();
     ui->leMessageToSend->clear();
 }
 
+
 void InterfaceDSPIC::on_newMessage(QByteArray message)
 {
-   CMD cmd((CMD)QString(message.left(2)).toInt(nullptr,16));
-   message.remove(0,2);
+    message.remove(0,2);
+    CMD cmd((CMD)QString(message.left(2)).toInt(nullptr,16));
 
-   switch(cmd)
-   {
-   case CMD_DAC_GET_VALUE:
-       dac->setValue(message.left(4).toInt(nullptr,16));
+    switch(cmd) /* The 2nd byte of message */
+    {
+    case CMD_DAC_GET_VALUE:
        ui->leDacValue->setText(QString::number(dac->getValue()));
        ui->teConsole->append("Current DAC value: " + ui->leDacValue->text());
        message.clear();
        break;
-   default:
+    case CMD_DAC_SET_VALUE:
+       dac->setValue(message.left(6).toInt(nullptr,16));
+       ui->leDacValue->setText(QString::number(dac->getValue()));
+       ui->teConsole->append("Current DAC value: " + ui->leDacValue->text());
+       message.clear();
        break;
-   }
+    default:
+       break;
+    }
 }
+
 
 void InterfaceDSPIC::on_btnDacGetValue_clicked()
 {
@@ -136,6 +176,7 @@ void InterfaceDSPIC::on_btnDacGetValue_clicked()
 
     serial->sendMessage(messageToSend);
 }
+
 
 void InterfaceDSPIC::on_btnDacSetValue_clicked()
 {
@@ -149,30 +190,168 @@ void InterfaceDSPIC::on_btnDacSetValue_clicked()
     }
     else
     {
-       dac->setValue(ui->leDacValue->text().toInt());
+        dac->setValue(ui->leDacValue->text().toInt());
 
-       qDebug() << "Setting Dac Value";
-       ui->teConsole->append("Setting DAC value to " + QString::number(dac->getValue()));
+        qDebug() << "Setting Dac Value";
+        ui->teConsole->append("Setting DAC value to " + QString::number(dac->getValue()));
 
-       QByteArray messageToSend;
+        QByteArray messageToSend;
 
-       messageToSend.append((char)0x04);
-       messageToSend.append((char)CMD_DAC_SET_VALUE);
-       messageToSend.append((char)(dac->getValue() >> 8));
-       messageToSend.append((char)dac->getValue());
+        messageToSend.append((char)0x04);
+        messageToSend.append((char)CMD_DAC_SET_VALUE);
+        messageToSend.append((char)(dac->getValue() >> 8));
+        messageToSend.append((char)dac->getValue());
 
-       serial->sendMessage(messageToSend);
+        serial->sendMessage(messageToSend);
     }
-
 }
+
 
 void InterfaceDSPIC::on_btgMux_buttonClicked(int id)
 {
     QByteArray messageToSend;
     messageToSend.append(0x03);
     messageToSend.append(CMD_MUX_SET_VALUE);
+
     mux->setInput((char)(-id-2));
     messageToSend.append(mux->getInput());
+
     serial->sendMessage(messageToSend);
     ui->teConsole->append("Setting MUX input to : " + QString::number(mux->getInput()));
 }
+
+
+void InterfaceDSPIC::on_btnOpenHapticComm_clicked()
+{
+    QString cr;
+    cr = QString(haptic->OpenCommunication());
+    ui->teConsole->append("Haptic status : " + cr);
+}
+
+
+void InterfaceDSPIC::on_btnCloseHapticComm_clicked()
+{
+    QString cr;
+    cr = QString(haptic->CloseCommunication());
+    ui->teConsole->append("Haptic status : " + cr);
+}
+
+
+void InterfaceDSPIC::on_btnStartHapticSim_clicked()
+{
+    QString cr;
+    //ui->btnHapticSetForce->setEnabled(false);
+    cr = QString(haptic->StartSpringSim());
+    ui->teConsole->append("Haptic status : " + cr);
+}
+
+void InterfaceDSPIC::on_btnStopHapticSim_clicked()
+{
+    QString cr;
+    //ui->btnHapticSetForce->setEnabled(true);
+    cr = QString(haptic->StopSpringSim());
+    ui->teConsole->append("Haptic status : " + cr);
+}
+
+
+void InterfaceDSPIC::on_btnExit_clicked()
+{
+    exit(1);
+}
+
+
+void InterfaceDSPIC::on_btnHapticSetForce_clicked()
+{
+    QString cr;
+    float newforce[6];
+    newforce[0] = (float)0.001*ui->spbAxe1->value();
+    newforce[1] = (float)0.001*ui->spbAxe2->value();
+    newforce[2] = (float)0.001*ui->spbAxe3->value();
+    newforce[3] = (float)0.001*ui->spbAxe4->value();
+    newforce[4] = (float)0.001*ui->spbAxe5->value();
+    newforce[5] = (float)0.001*ui->spbAxe6->value();
+
+    cr = QString(haptic->SetForce(newforce));
+    ui->teConsole->append("Haptic status : " + cr);
+
+}
+
+
+void InterfaceDSPIC::on_btnHapticDefaultForce_clicked()
+{
+    /* Set the default forces and torques */
+    ui->spbAxe1->setValue(100); /* fx */
+    ui->spbAxe2->setValue(100); /* fy */
+    ui->spbAxe3->setValue(100); /* fz */
+    ui->spbAxe4->setValue(0);   /* cx */
+    ui->spbAxe5->setValue(0);   /* cy */
+    ui->spbAxe6->setValue(0);   /* cz */
+}
+
+
+void InterfaceDSPIC::on_btnHapticLoopForce_clicked()
+{
+    QString cr;
+
+    float newforce[6];
+    for(int i = 0 ; i < 6 ; i++)
+    {
+        newforce[i] = 0;
+    }
+
+    /* Be careful to change the value */
+    /* It is dangerous if the forces increases too fast */
+    for(int ii = 0 ; ii < 200 ; ii+=10)
+    {
+        newforce[0] = (float)0.001*ii;
+        //cr = QString(haptic->SetForce(newforce));
+        cr = QString("New force: %1, %2, %3, %4, %5, %6").arg(newforce[0]).arg(newforce[1])
+                .arg(newforce[2]).arg(newforce[3]).arg(newforce[4]).arg(newforce[5]);
+        ui->teConsole->append("Haptic status : " + cr);
+
+        /* Wait 1 sec for each loop */
+        QTime t;
+        t.start();
+        while(t.elapsed()<1000)
+            QCoreApplication::processEvents();
+    }
+}
+
+
+void InterfaceDSPIC::showPosMonitor()
+{
+    ui->spbPosX->setValue(haptic->position[0]);
+    ui->spbPosY->setValue(haptic->position[1]);
+    ui->spbPosZ->setValue(haptic->position[2]);
+    ui->spbPosQX->setValue(haptic->position[3]);
+    ui->spbPosQY->setValue(haptic->position[4]);
+    ui->spbPosQZ->setValue(haptic->position[5]);
+    ui->spbPosQW->setValue(haptic->position[6]);
+}
+
+
+void InterfaceDSPIC::on_ckbPosSet_clicked(bool checked)
+{
+    if(checked==true)
+    {
+        ui->spbPosQW->setEnabled(true);
+        ui->spbPosQX->setEnabled(true);
+        ui->spbPosQY->setEnabled(true);
+        ui->spbPosQZ->setEnabled(true);
+        ui->spbPosX->setEnabled(true);
+        ui->spbPosY->setEnabled(true);
+        ui->spbPosZ->setEnabled(true);
+    }
+
+    else
+    {
+        ui->spbPosQW->setEnabled(false);
+        ui->spbPosQX->setEnabled(false);
+        ui->spbPosQY->setEnabled(false);
+        ui->spbPosQZ->setEnabled(false);
+        ui->spbPosX->setEnabled(false);
+        ui->spbPosY->setEnabled(false);
+        ui->spbPosZ->setEnabled(false);
+    }
+}
+

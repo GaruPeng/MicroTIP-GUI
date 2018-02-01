@@ -19,6 +19,7 @@ public:
     static QStringList getBaudRates();
     void sendMessage(QByteArray messageToSend);
     QByteArray receiveMessage();
+    QString retext;
 private:
     void configure(qint32 baudrate, QString portName);
     void open();

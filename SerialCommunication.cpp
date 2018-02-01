@@ -1,9 +1,12 @@
 #include "SerialCommunication.h"
 
+
 SerialCommunication::SerialCommunication(QString portName, qint32 baudRate)
 {
+
     this->configure(baudRate, portName);
     this->open();
+
 }
 
 SerialCommunication::~SerialCommunication()
@@ -54,14 +57,25 @@ void SerialCommunication::configure(qint32 baudrate, QString portName)
 
 void SerialCommunication::open()
 {
+    bool chk;
     if(!serialPort.isOpen())
     {
-        serialPort.open(QIODevice::ReadWrite);
-        qDebug() << "Serial port opened";
-    }
-    if(!receptionThread.isRunning())
-    {
-        this->configureReception();
+        chk = serialPort.open(QIODevice::ReadWrite);
+        if(chk==false)
+        {
+            retext = "Nothing is opened: " + serialPort.errorString();
+            qDebug() << "Nothing is opened";
+        }
+        else
+        {
+            retext = "Serial port opened";
+            qDebug() << "Serial port opened";
+
+            if(!receptionThread.isRunning())
+            {
+                this->configureReception();
+            }
+        }
     }
 }
 
@@ -107,6 +121,7 @@ void SerialCommunication::configureReception()
         QObject::connect(&receptionThread, SIGNAL(started()), this, SLOT(receive()));
         receptionThread.start();
         qDebug() << "Reception thread started" ;
+        //retext = "Reception thread started" ;
         keepReceivingMessage = true;
         this->moveToThread(&receptionThread);
     }
