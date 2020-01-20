@@ -19,7 +19,7 @@ InterfaceDSPIC::InterfaceDSPIC(QWidget *parent) :
     /* Create a scope window */
     scope = new Scope;
     scope->setGeometry(50,50,700,300);
-    scope->show();
+    //scope->show();
 }
 
 
@@ -40,6 +40,7 @@ void InterfaceDSPIC::init()
     ui->leMessageToSend->setEnabled(false);
     ui->btnSendMessage->setEnabled(false);
     ui->gpbDac->setEnabled(false);
+
 
     /* Disable Position Monitor on startup */
     ui->spbPosQW->setEnabled(false);
@@ -85,6 +86,8 @@ void InterfaceDSPIC::on_btnOpenCommunicationWithMicrocontroller_clicked()
     dac = new Dac();
 
     mux = new Multiplexer();
+
+    pwm = new PWM();
 
     ui->btnOpenCommunicationWithMicrocontroller->setEnabled(false);
     ui->btnCloseCommunicationWithMicrocontroller->setEnabled(true);
@@ -151,18 +154,37 @@ void InterfaceDSPIC::on_newMessage(QByteArray message)
     switch(cmd) /* The 2nd byte of message */
     {
     case CMD_DAC_GET_VALUE:
-       ui->leDacValue->setText(QString::number(dac->getValue()));
-       ui->teConsole->append("Current DAC value: " + ui->leDacValue->text());
-       message.clear();
-       break;
+        dac->setValue(message.right(4).toInt(nullptr,16));
+        ui->leDacValue->setText(QString::number(dac->getValue()));
+        ui->teConsole->append("Current DAC value: " + ui->leDacValue->text());
+        message.clear();
+        break;
     case CMD_DAC_SET_VALUE:
-       dac->setValue(message.left(6).toInt(nullptr,16));
-       ui->leDacValue->setText(QString::number(dac->getValue()));
-       ui->teConsole->append("Current DAC value: " + ui->leDacValue->text());
-       message.clear();
-       break;
+        ui->teConsole->append("DAC value is set ");
+        message.clear();
+        break;
+    case CMD_PWM_GET_FREQ:
+        pwm->setFreq(message.right(4).toInt(nullptr,16));
+        ui->lePwmFreq->setText(QString::number(pwm->getFreq()));
+        ui->teConsole->append("Current PWM frequency: " + ui->lePwmFreq->text());
+        message.clear();
+        break;
+    case CMD_PWM_SET_FREQ:
+        ui->teConsole->append("Frequency is set ");
+        message.clear();
+        break;
+    case CMD_PWM_GET_DUTY:
+        pwm->setDuty(message.right(2).toInt(nullptr,16));
+        ui->lePwmDuty->setText(QString::number(pwm->getDuty()));
+        ui->teConsole->append("Current PWM duty cycle: " + QString::number(pwm->getDuty()) + "0%");
+        message.clear();
+        break;
+    case CMD_PWM_SET_DUTY:
+        ui->teConsole->append("Duty cycle is set ");
+        message.clear();
+        break;
     default:
-       break;
+        break;
     }
 }
 
@@ -201,6 +223,83 @@ void InterfaceDSPIC::on_btnDacSetValue_clicked()
         messageToSend.append((char)CMD_DAC_SET_VALUE);
         messageToSend.append((char)(dac->getValue() >> 8));
         messageToSend.append((char)dac->getValue());
+
+        serial->sendMessage(messageToSend);
+    }
+}
+
+
+void InterfaceDSPIC::on_btnPwmGetFreq_clicked()
+{
+    QByteArray messageToSend;
+
+    messageToSend.append((char)0x02);
+    messageToSend.append((char)CMD_PWM_GET_FREQ);
+
+    serial->sendMessage(messageToSend);
+}
+
+
+void InterfaceDSPIC::on_btnPwmSetFreq_clicked()
+{
+    if(ui->lePwmFreq->text().isEmpty())
+    {
+        QMessageBox::critical(this,"PWM","Cannot set an empty value");
+    }
+
+    else
+    {
+        pwm->setFreq(ui->lePwmFreq->text().toInt());
+
+        qDebug() << "Setting PWM Frequency";
+        ui->teConsole->append("Setting PWM freqency to " + QString::number(pwm->getFreq()));
+
+        QByteArray messageToSend;
+
+        messageToSend.append((char)0x04);
+        messageToSend.append((char)CMD_PWM_SET_FREQ);
+        messageToSend.append((char)(pwm->getFreq() >> 8));
+        messageToSend.append((char)pwm->getFreq());
+
+        serial->sendMessage(messageToSend);
+    }
+}
+
+
+void InterfaceDSPIC::on_btnPwmGetDuty_clicked()
+{
+    QByteArray messageToSend;
+
+    messageToSend.append((char)0x02);
+    messageToSend.append((char)CMD_PWM_GET_DUTY);
+
+    serial->sendMessage(messageToSend);
+}
+
+
+void InterfaceDSPIC::on_btnPwmSetDuty_clicked()
+{
+    if(ui->lePwmDuty->text().isEmpty())
+    {
+        QMessageBox::critical(this,"PWM","Cannot set an empty value");
+    }
+    else if(ui->lePwmDuty->text().toInt() > 10000)
+    {
+        QMessageBox::critical(this,"PWM","Cannot set a duty cycle > 100%");
+    }
+    else
+    {
+        pwm->setDuty(ui->lePwmDuty->text().toInt());
+
+        qDebug() << "Setting PWM Duty Cycle";
+        ui->teConsole->append("Setting PWM Duty Cycle to " + QString::number(pwm->getDuty()) + "0%");
+
+        QByteArray messageToSend;
+
+        messageToSend.append((char)0x03);
+        messageToSend.append((char)CMD_PWM_SET_DUTY);
+        //messageToSend.append((char)(pwm->getDuty() >> 8));
+        messageToSend.append((char)pwm->getDuty());
 
         serial->sendMessage(messageToSend);
     }
@@ -355,3 +454,51 @@ void InterfaceDSPIC::on_ckbPosSet_clicked(bool checked)
     }
 }
 
+
+
+void InterfaceDSPIC::on_btnPwmReset_clicked()
+{
+    qDebug() << "Reset PWM";
+    ui->teConsole->append("Reset PWM value to 0V");
+
+    QByteArray messageToSend;
+
+    messageToSend.append((char)0x02);
+    messageToSend.append((char)0x80);
+
+
+    serial->sendMessage(messageToSend);
+}
+
+void InterfaceDSPIC::on_btnPwmRun_clicked()
+{
+    qDebug() << "PWM default";
+    //ui->teConsole->append("Reset PWM value to 0V");
+
+    QByteArray messageToSend;
+    QByteArray messageToSend2;
+
+    messageToSend.append((char)0x02);
+    messageToSend.append((char)0x82);
+    serial->sendMessage(messageToSend);
+
+    messageToSend2.append((char)0x04);
+    messageToSend2.append((char)CMD_DAC_SET_VALUE);
+    messageToSend2.append((char)(65535 >> 8));
+    messageToSend2.append((char)65535);
+    serial->sendMessage(messageToSend2);
+}
+
+void InterfaceDSPIC::on_btnPwmWarm_clicked()
+{
+    qDebug() << "Warm PWM";
+    ui->teConsole->append("PWM 0V activation");
+
+    QByteArray messageToSend;
+
+    messageToSend.append((char)0x02);
+    messageToSend.append((char)0x81);
+
+
+    serial->sendMessage(messageToSend);
+}

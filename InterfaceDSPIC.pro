@@ -20,7 +20,8 @@ SOURCES += \
     Dac.cpp \
     Multiplexer.cpp \
     haptic.cpp \
-    scope.cpp
+    scope.cpp \
+    Pwm.cpp
 
 HEADERS  += \
     InterfaceDSPIC.h \
@@ -29,7 +30,8 @@ HEADERS  += \
     Multiplexer.h \
     VirtuoseAPI.h \
     haptic.h \
-    scope.h
+    scope.h \
+    Pwm.h
 
 FORMS    += InterfaceDSPIC.ui
 
