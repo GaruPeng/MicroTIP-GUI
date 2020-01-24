@@ -7,7 +7,7 @@ Multiplexer::Multiplexer() : input(0)
 
 void Multiplexer::setInput(char input)
 {
-    if((input>0) && (input<9))
+    if((input>0) && (input<5))
     {
         this->input = input;
     }

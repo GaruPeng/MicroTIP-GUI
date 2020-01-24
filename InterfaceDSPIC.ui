@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>882</width>
-    <height>605</height>
+    <width>891</width>
+    <height>613</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>891</width>
+    <height>613</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>InterfaceDSPIC</string>
@@ -88,290 +94,6 @@
         <property name="text">
          <string>Send</string>
         </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QGroupBox" name="vlyMux">
-     <property name="title">
-      <string>Multiplexer</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_14">
-      <item row="0" column="0">
-       <widget class="QRadioButton" name="radMuxNoInput">
-        <property name="text">
-         <string>No input</string>
-        </property>
-        <attribute name="buttonGroup">
-         <string notr="true">btgMux</string>
-        </attribute>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QRadioButton" name="radMuxInput1">
-        <property name="text">
-         <string>Input 1</string>
-        </property>
-        <attribute name="buttonGroup">
-         <string notr="true">btgMux</string>
-        </attribute>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QRadioButton" name="radMuxInput2">
-        <property name="text">
-         <string>Input 2</string>
-        </property>
-        <attribute name="buttonGroup">
-         <string notr="true">btgMux</string>
-        </attribute>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QRadioButton" name="radMuxInput3">
-        <property name="text">
-         <string>Input 3</string>
-        </property>
-        <attribute name="buttonGroup">
-         <string notr="true">btgMux</string>
-        </attribute>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QRadioButton" name="radMuxInput4">
-        <property name="text">
-         <string>Input 4</string>
-        </property>
-        <attribute name="buttonGroup">
-         <string notr="true">btgMux</string>
-        </attribute>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QRadioButton" name="radMuxInput5">
-        <property name="text">
-         <string>Input 5</string>
-        </property>
-        <attribute name="buttonGroup">
-         <string notr="true">btgMux</string>
-        </attribute>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QRadioButton" name="radMuxInput6">
-        <property name="text">
-         <string>Input 6</string>
-        </property>
-        <attribute name="buttonGroup">
-         <string notr="true">btgMux</string>
-        </attribute>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QRadioButton" name="radMuxInput7">
-        <property name="text">
-         <string>Input 7</string>
-        </property>
-        <attribute name="buttonGroup">
-         <string notr="true">btgMux</string>
-        </attribute>
-       </widget>
-      </item>
-      <item row="2" column="3">
-       <widget class="QRadioButton" name="radMuxInput8">
-        <property name="text">
-         <string>Input 8</string>
-        </property>
-        <attribute name="buttonGroup">
-         <string notr="true">btgMux</string>
-        </attribute>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="1" column="0" rowspan="2">
-    <widget class="QGroupBox" name="gbpConsole">
-     <property name="title">
-      <string>Console</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_4">
-      <item row="3" column="3">
-       <widget class="QPushButton" name="btnClearConsole">
-        <property name="text">
-         <string>Clear</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QPushButton" name="btnExit">
-        <property name="text">
-         <string>Exit</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" rowspan="2" colspan="4">
-       <widget class="QTextEdit" name="teConsole">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-        <property name="acceptRichText">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QGroupBox" name="gpbExperiment">
-     <property name="title">
-      <string>Experiment</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_9">
-      <item row="0" column="1" colspan="2">
-       <widget class="QComboBox" name="cmbExperimentName"/>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="lblExperimentName">
-        <property name="text">
-         <string>Name</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="0" colspan="2">
-       <widget class="QPushButton" name="btnStartExperiment">
-        <property name="text">
-         <string>Start</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" colspan="3">
-       <widget class="QLineEdit" name="leExperimentName"/>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="lblExperimentDataRate">
-        <property name="text">
-         <string>Data rate [Hz]</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="leExperimentDataRate">
-        <property name="minimumSize">
-         <size>
-          <width>60</width>
-          <height>0</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="3">
-       <widget class="QLineEdit" name="leExperimentName_3">
-        <property name="minimumSize">
-         <size>
-          <width>40</width>
-          <height>0</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QLabel" name="lblExperimentDuration">
-        <property name="text">
-         <string>Duration [s]</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QPushButton" name="btnNewExperiment">
-        <property name="text">
-         <string>New</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="2" colspan="2">
-       <widget class="QPushButton" name="btnStopExperiment">
-        <property name="text">
-         <string>Stop</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QPushButton" name="btnDeleteExperiment">
-        <property name="text">
-         <string>Delete</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0" colspan="4">
-       <widget class="QGroupBox" name="gpbMuxInputs">
-        <property name="title">
-         <string>Multiplexer inputs</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_10">
-         <item row="2" column="0">
-          <widget class="QCheckBox" name="ckbMuxInput_3">
-           <property name="text">
-            <string>Input 3</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QCheckBox" name="ckbMuxInput_7">
-           <property name="text">
-            <string>Input 7</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QCheckBox" name="ckbMuxInput_2">
-           <property name="text">
-            <string>Input 2</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QCheckBox" name="ckbMuxInput_6">
-           <property name="text">
-            <string>Input 6</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QCheckBox" name="ckbMuxInput_1">
-           <property name="text">
-            <string>Input 1</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QCheckBox" name="ckbMuxInput_5">
-           <property name="text">
-            <string>Input 5</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QCheckBox" name="ckbMuxInput_4">
-           <property name="text">
-            <string>Input 4</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QCheckBox" name="ckbMuxInput_8">
-           <property name="text">
-            <string>Input 8</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </widget>
       </item>
      </layout>
@@ -962,64 +684,271 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QGroupBox" name="gpbDac">
+   <item row="3" column="1">
+    <widget class="QGroupBox" name="gpbPWM">
      <property name="title">
-      <string>Dac</string>
+      <string>PWM</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_5">
-      <item row="2" column="3">
-       <widget class="QPushButton" name="btnPwmSetDuty">
-        <property name="text">
-         <string>Set</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QPushButton" name="btnPwmSetFreq">
-        <property name="text">
-         <string>Set</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="lePwmDuty"/>
-      </item>
-      <item row="0" column="2">
-       <widget class="QPushButton" name="btnDacGetValue">
-        <property name="text">
-         <string>Get</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="lePwmFreq"/>
-      </item>
-      <item row="1" column="2">
-       <widget class="QPushButton" name="btnPwmGetFreq">
-        <property name="text">
-         <string>Get</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="lblPwmDuty">
-        <property name="text">
-         <string>DutyCycle</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
+     <layout class="QGridLayout" name="gridLayout_9">
+      <item row="0" column="0">
        <widget class="QLabel" name="lblPwmFreq">
         <property name="text">
          <string>Period</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="lblDacValue">
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="lePwmFreq"/>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="btnPwmGetFreq">
         <property name="text">
-         <string>Value</string>
+         <string>Get</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QPushButton" name="btnPwmSetFreq">
+        <property name="text">
+         <string>Set</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lblPwmDuty">
+        <property name="text">
+         <string>DutyCycle</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="lePwmDuty"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="QPushButton" name="btnPwmGetDuty">
+        <property name="text">
+         <string>Get</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QPushButton" name="btnPwmSetDuty">
+        <property name="text">
+         <string>Set</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QPushButton" name="btnPwmReset">
+        <property name="text">
+         <string>Reset</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QPushButton" name="btnPwmWarm">
+        <property name="text">
+         <string>WarmUp</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QPushButton" name="btnPwmRun">
+        <property name="text">
+         <string>Run</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QGroupBox" name="gpbMux">
+     <property name="title">
+      <string>Multiplexer</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_14">
+      <item row="0" column="1">
+       <widget class="QRadioButton" name="radMuxInputAll">
+        <property name="text">
+         <string>All input</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">btgMux</string>
+        </attribute>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="radMuxNoInput">
+        <property name="text">
+         <string>No input</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">btgMux</string>
+        </attribute>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="radMuxInput1">
+        <property name="text">
+         <string>Input 1</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">btgMux</string>
+        </attribute>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QRadioButton" name="radMuxInput4">
+        <property name="text">
+         <string>Input 4</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">btgMux</string>
+        </attribute>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QRadioButton" name="radMuxInput2">
+        <property name="text">
+         <string>Input 2</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">btgMux</string>
+        </attribute>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QRadioButton" name="radMuxInput3">
+        <property name="text">
+         <string>Input 3</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">btgMux</string>
+        </attribute>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0" rowspan="3">
+    <widget class="QGroupBox" name="gbpConsole">
+     <property name="title">
+      <string>Console</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="3" column="3">
+       <widget class="QPushButton" name="btnClearConsole">
+        <property name="text">
+         <string>Clear</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QPushButton" name="btnExit">
+        <property name="text">
+         <string>Exit</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" rowspan="2" colspan="4">
+       <widget class="QTextEdit" name="teConsole">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="acceptRichText">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="1" rowspan="2">
+    <widget class="QGroupBox" name="gpbDac">
+     <property name="title">
+      <string>Dac</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_5">
+      <item row="3" column="2">
+       <widget class="QPushButton" name="btnDacGetValue3">
+        <property name="text">
+         <string>Get</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="lblDacValue2">
+        <property name="text">
+         <string>Ch. 2</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="leDacValue3"/>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="leDacValue2"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="QPushButton" name="btnDacGetValue2">
+        <property name="text">
+         <string>Get</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QPushButton" name="btnDacGetValue4">
+        <property name="text">
+         <string>Get</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="lblDacValue3">
+        <property name="text">
+         <string>Ch. 3</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="leDacValue4"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="lblDacValue4">
+        <property name="text">
+         <string>Ch. 4</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="3">
+       <widget class="QPushButton" name="btnDacSetValue4">
+        <property name="text">
+         <string>Set</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
+       <widget class="QPushButton" name="btnDacSetValue3">
+        <property name="text">
+         <string>Set</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QPushButton" name="btnDacSetValue">
+        <property name="text">
+         <string>Set</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="btnDacGetValue">
+        <property name="text">
+         <string>Get</string>
         </property>
        </widget>
       </item>
@@ -1033,51 +962,24 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
-       <widget class="QPushButton" name="btnPwmGetDuty">
-        <property name="text">
-         <string>Get</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QPushButton" name="btnDacSetValue">
+      <item row="2" column="3">
+       <widget class="QPushButton" name="btnDacSetValue2">
         <property name="text">
          <string>Set</string>
         </property>
        </widget>
       </item>
-      <item row="8" column="3">
-       <widget class="QPushButton" name="btnPwmRun">
+      <item row="0" column="0">
+       <widget class="QLabel" name="lblDacValue">
         <property name="text">
-         <string>Run</string>
+         <string>Ch. 1</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="2">
-       <spacer name="vspDac">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="6" column="3">
-       <widget class="QPushButton" name="btnPwmReset">
+      <item row="5" column="3">
+       <widget class="QPushButton" name="btnDacReset">
         <property name="text">
-         <string>Reset</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="3">
-       <widget class="QPushButton" name="btnPwmWarm">
-        <property name="text">
-         <string>WarmUp</string>
+         <string>Reset All</string>
         </property>
        </widget>
       </item>

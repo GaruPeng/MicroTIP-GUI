@@ -19,7 +19,7 @@ InterfaceDSPIC::InterfaceDSPIC(QWidget *parent) :
     /* Create a scope window */
     scope = new Scope;
     scope->setGeometry(50,50,700,300);
-    //scope->show();
+    scope->show();
 }
 
 
@@ -41,7 +41,6 @@ void InterfaceDSPIC::init()
     ui->btnSendMessage->setEnabled(false);
     ui->gpbDac->setEnabled(false);
 
-
     /* Disable Position Monitor on startup */
     ui->spbPosQW->setEnabled(false);
     ui->spbPosQX->setEnabled(false);
@@ -50,6 +49,12 @@ void InterfaceDSPIC::init()
     ui->spbPosX->setEnabled(false);
     ui->spbPosY->setEnabled(false);
     ui->spbPosZ->setEnabled(false);
+
+    /* Disable MuxInput on startup */
+    ui->gpbMux->setEnabled(false);
+
+    /* Disable PWM function on startup */
+    ui->gpbPWM->setEnabled(false);
 
 }
 
@@ -85,7 +90,7 @@ void InterfaceDSPIC::on_btnOpenCommunicationWithMicrocontroller_clicked()
 
     dac = new Dac();
 
-    mux = new Multiplexer();
+    //mux = new Multiplexer();
 
     pwm = new PWM();
 
@@ -108,7 +113,7 @@ void InterfaceDSPIC::on_btnCloseCommunicationWithMicrocontroller_clicked()
 {
     delete serial;
     delete dac;
-    delete mux;
+    //delete mux;
 
     ui->btnOpenCommunicationWithMicrocontroller->setEnabled(true);
     ui->btnCloseCommunicationWithMicrocontroller->setEnabled(false);
@@ -154,14 +159,69 @@ void InterfaceDSPIC::on_newMessage(QByteArray message)
     switch(cmd) /* The 2nd byte of message */
     {
     case CMD_DAC_GET_VALUE:
+        dac->setCmdAdr(message.mid(2,2).toInt(nullptr,16));
         dac->setValue(message.right(4).toInt(nullptr,16));
-        ui->leDacValue->setText(QString::number(dac->getValue()));
-        ui->teConsole->append("Current DAC value: " + ui->leDacValue->text());
-        message.clear();
+        switch(dac->getCmdAdr())
+        {
+        case DAC_WRITE_UPDATE_CH1:
+            ui->leDacValue->setText(QString::number(dac->getValue()));
+            ui->teConsole->append("Current DAC CH1 value: " + ui->leDacValue->text());
+            message.clear();
+            break;
+        case DAC_WRITE_UPDATE_CH2:
+            ui->leDacValue2->setText(QString::number(dac->getValue()));
+            ui->teConsole->append("Current DAC CH2 value: " + ui->leDacValue2->text());
+            message.clear();
+            break;
+        case DAC_WRITE_UPDATE_CH3:
+            ui->leDacValue3->setText(QString::number(dac->getValue()));
+            ui->teConsole->append("Current DAC CH3 value: " + ui->leDacValue3->text());
+            message.clear();
+            break;
+        case DAC_WRITE_UPDATE_CH4:
+            ui->leDacValue4->setText(QString::number(dac->getValue()));
+            ui->teConsole->append("Current DAC CH4 value: " + ui->leDacValue4->text());
+            message.clear();
+            break;
+        case DAC_WRITE_UPDATE_CHall:
+            ui->leDacValue->setText(QString::number(dac->getValue()));
+            ui->leDacValue2->setText(QString::number(dac->getValue()));
+            ui->leDacValue3->setText(QString::number(dac->getValue()));
+            ui->leDacValue4->setText(QString::number(dac->getValue()));
+            ui->teConsole->append("Current DAC ALL value: " + ui->leDacValue->text());
+            message.clear();
+            break;
+        default:
+            break;
+        }
         break;
     case CMD_DAC_SET_VALUE:
-        ui->teConsole->append("DAC value is set ");
-        message.clear();
+        dac->setCmdAdr(message.mid(2,2).toInt(nullptr,16));
+        switch(dac->getCmdAdr())
+        {
+        case DAC_WRITE_UPDATE_CH1:
+            ui->teConsole->append("DAC CH1 value is set ");
+            message.clear();
+            break;
+        case DAC_WRITE_UPDATE_CH2:
+            ui->teConsole->append("DAC CH2 value is set ");
+            message.clear();
+            break;
+        case DAC_WRITE_UPDATE_CH3:
+            ui->teConsole->append("DAC CH3 value is set ");
+            message.clear();
+            break;
+        case DAC_WRITE_UPDATE_CH4:
+            ui->teConsole->append("DAC CH4 value is set ");
+            message.clear();
+            break;
+        case DAC_WRITE_UPDATE_CHall:
+            ui->teConsole->append("DAC ALL value is set ");
+            message.clear();
+            break;
+        default:
+            break;
+        }
         break;
     case CMD_PWM_GET_FREQ:
         pwm->setFreq(message.right(4).toInt(nullptr,16));
@@ -189,12 +249,51 @@ void InterfaceDSPIC::on_newMessage(QByteArray message)
 }
 
 
+/*DAC//////////////////////////////////////////////////////////////////////*/
+
 void InterfaceDSPIC::on_btnDacGetValue_clicked()
 {
     QByteArray messageToSend;
 
-    messageToSend.append((char)0x02);
+    messageToSend.append((char)0x03);
     messageToSend.append((char)CMD_DAC_GET_VALUE);
+    messageToSend.append((char)0x18);
+
+    serial->sendMessage(messageToSend);
+}
+
+
+void InterfaceDSPIC::on_btnDacGetValue2_clicked()
+{
+    QByteArray messageToSend;
+
+    messageToSend.append((char)0x03);
+    messageToSend.append((char)CMD_DAC_GET_VALUE);
+    messageToSend.append((char)0x19);
+
+    serial->sendMessage(messageToSend);
+}
+
+
+void InterfaceDSPIC::on_btnDacGetValue3_clicked()
+{
+    QByteArray messageToSend;
+
+    messageToSend.append((char)0x03);
+    messageToSend.append((char)CMD_DAC_GET_VALUE);
+    messageToSend.append((char)0x1A);
+
+    serial->sendMessage(messageToSend);
+}
+
+
+void InterfaceDSPIC::on_btnDacGetValue4_clicked()
+{
+    QByteArray messageToSend;
+
+    messageToSend.append((char)0x03);
+    messageToSend.append((char)CMD_DAC_GET_VALUE);
+    messageToSend.append((char)0x1B);
 
     serial->sendMessage(messageToSend);
 }
@@ -213,14 +312,17 @@ void InterfaceDSPIC::on_btnDacSetValue_clicked()
     else
     {
         dac->setValue(ui->leDacValue->text().toInt());
+        dac->setCmdAdr(0x18);
 
-        qDebug() << "Setting Dac Value";
-        ui->teConsole->append("Setting DAC value to " + QString::number(dac->getValue()));
+        qDebug() << "Setting Dac CH1 Value";
+        ui->teConsole->append("Setting DAC CH1 value to " + QString::number(dac->getValue()));
 
         QByteArray messageToSend;
 
-        messageToSend.append((char)0x04);
+        messageToSend.append((char)0x05);
         messageToSend.append((char)CMD_DAC_SET_VALUE);
+        /* input register: Write to and update CH1: 00011000 = 0x18 */
+        messageToSend.append((char)0x18);
         messageToSend.append((char)(dac->getValue() >> 8));
         messageToSend.append((char)dac->getValue());
 
@@ -228,6 +330,127 @@ void InterfaceDSPIC::on_btnDacSetValue_clicked()
     }
 }
 
+
+void InterfaceDSPIC::on_btnDacSetValue2_clicked()
+{
+    if(ui->leDacValue2->text().isEmpty())
+    {
+        QMessageBox::critical(this,"DAC","Cannot set an empty value");
+    }
+    else if(ui->leDacValue2->text().toInt() > 65535)
+    {
+        QMessageBox::critical(this,"DAC","Cannot set a value > 65535");
+    }
+    else
+    {
+        dac->setValue(ui->leDacValue2->text().toInt());
+        dac->setCmdAdr(0x19);
+
+        qDebug() << "Setting Dac CH2 Value";
+        ui->teConsole->append("Setting DAC CH2 value to " + QString::number(dac->getValue()));
+
+        QByteArray messageToSend;
+
+        messageToSend.append((char)0x05);
+        messageToSend.append((char)CMD_DAC_SET_VALUE);
+        /* input register: Write to and update CH2: 00011001 = 0x19 */
+        messageToSend.append((char)0x19);
+        messageToSend.append((char)(dac->getValue() >> 8));
+        messageToSend.append((char)dac->getValue());
+
+        serial->sendMessage(messageToSend);
+    }
+}
+
+void InterfaceDSPIC::on_btnDacSetValue3_clicked()
+{
+    if(ui->leDacValue3->text().isEmpty())
+    {
+        QMessageBox::critical(this,"DAC","Cannot set an empty value");
+    }
+    else if(ui->leDacValue3->text().toInt() > 65535)
+    {
+        QMessageBox::critical(this,"DAC","Cannot set a value > 65535");
+    }
+    else
+    {
+        dac->setValue(ui->leDacValue3->text().toInt());
+        dac->setCmdAdr(0x1A);
+
+        qDebug() << "Setting Dac CH3 Value";
+        ui->teConsole->append("Setting DAC CH3 value to " + QString::number(dac->getValue()));
+
+        QByteArray messageToSend;
+
+        messageToSend.append((char)0x05);
+        messageToSend.append((char)CMD_DAC_SET_VALUE);
+        /* input register: Write to and update CH3: 00011010 = 0x1A */
+        messageToSend.append((char)0x1A);
+        messageToSend.append((char)(dac->getValue() >> 8));
+        messageToSend.append((char)dac->getValue());
+
+        serial->sendMessage(messageToSend);
+    }
+}
+
+void InterfaceDSPIC::on_btnDacSetValue4_clicked()
+{
+    if(ui->leDacValue4->text().isEmpty())
+    {
+        QMessageBox::critical(this,"DAC","Cannot set an empty value");
+    }
+    else if(ui->leDacValue4->text().toInt() > 65535)
+    {
+        QMessageBox::critical(this,"DAC","Cannot set a value > 65535");
+    }
+    else
+    {
+        dac->setValue(ui->leDacValue4->text().toInt());
+        dac->setCmdAdr(0x1B);
+
+        qDebug() << "Setting Dac CH4 Value";
+        ui->teConsole->append("Setting DAC CH4 value to " + QString::number(dac->getValue()));
+
+        QByteArray messageToSend;
+
+        messageToSend.append((char)0x05);
+        messageToSend.append((char)CMD_DAC_SET_VALUE);
+        /* input register: Write to and update CH4: 00011011 = 0x1B */
+        messageToSend.append((char)0x1B);
+        messageToSend.append((char)(dac->getValue() >> 8));
+        messageToSend.append((char)dac->getValue());
+
+        serial->sendMessage(messageToSend);
+    }
+}
+
+
+
+void InterfaceDSPIC::on_btnDacReset_clicked()
+{
+
+    dac->setValue(32767);
+    dac->setCmdAdr(0x1F);
+
+    qDebug() << "Setting Dac ALL Value to 0.0V";
+    ui->teConsole->append("Setting Dac ALL Value to 0.0V");
+
+    QByteArray messageToSend;
+
+    messageToSend.append((char)0x05);
+    messageToSend.append((char)CMD_DAC_SET_VALUE);
+    /* input register: Write to and update all: 00011111 = 0x1F */
+    messageToSend.append((char)0x1F);
+    messageToSend.append((char)(dac->getValue() >> 8));
+    messageToSend.append((char)dac->getValue());
+
+    serial->sendMessage(messageToSend);
+
+}
+
+
+
+/*PWM//////////////////////////////////////////////////////////////////////*/
 
 void InterfaceDSPIC::on_btnPwmGetFreq_clicked()
 {
@@ -306,6 +529,56 @@ void InterfaceDSPIC::on_btnPwmSetDuty_clicked()
 }
 
 
+void InterfaceDSPIC::on_btnPwmReset_clicked()
+{
+    qDebug() << "Reset PWM";
+    ui->teConsole->append("Reset PWM value to 0V");
+
+    QByteArray messageToSend;
+
+    messageToSend.append((char)0x02);
+    messageToSend.append((char)0x80);
+
+
+    serial->sendMessage(messageToSend);
+}
+
+void InterfaceDSPIC::on_btnPwmRun_clicked()
+{
+    qDebug() << "PWM default";
+    //ui->teConsole->append("Reset PWM value to 0V");
+
+    QByteArray messageToSend;
+    QByteArray messageToSend2;
+
+    messageToSend.append((char)0x02);
+    messageToSend.append((char)0x82);
+    serial->sendMessage(messageToSend);
+
+    messageToSend2.append((char)0x04);
+    messageToSend2.append((char)CMD_DAC_SET_VALUE);
+    messageToSend2.append((char)(65535 >> 8));
+    messageToSend2.append((char)65535);
+    serial->sendMessage(messageToSend2);
+}
+
+void InterfaceDSPIC::on_btnPwmWarm_clicked()
+{
+    qDebug() << "Warm PWM";
+    ui->teConsole->append("PWM 0V activation");
+
+    QByteArray messageToSend;
+
+    messageToSend.append((char)0x02);
+    messageToSend.append((char)0x81);
+
+
+    serial->sendMessage(messageToSend);
+}
+
+
+/*MUX//////////////////////////////////////////////////////////////////////*/
+
 void InterfaceDSPIC::on_btgMux_buttonClicked(int id)
 {
     QByteArray messageToSend;
@@ -319,6 +592,8 @@ void InterfaceDSPIC::on_btgMux_buttonClicked(int id)
     ui->teConsole->append("Setting MUX input to : " + QString::number(mux->getInput()));
 }
 
+
+/*HAPTIC//////////////////////////////////////////////////////////////////////*/
 
 void InterfaceDSPIC::on_btnOpenHapticComm_clicked()
 {
@@ -456,49 +731,6 @@ void InterfaceDSPIC::on_ckbPosSet_clicked(bool checked)
 
 
 
-void InterfaceDSPIC::on_btnPwmReset_clicked()
-{
-    qDebug() << "Reset PWM";
-    ui->teConsole->append("Reset PWM value to 0V");
-
-    QByteArray messageToSend;
-
-    messageToSend.append((char)0x02);
-    messageToSend.append((char)0x80);
 
 
-    serial->sendMessage(messageToSend);
-}
 
-void InterfaceDSPIC::on_btnPwmRun_clicked()
-{
-    qDebug() << "PWM default";
-    //ui->teConsole->append("Reset PWM value to 0V");
-
-    QByteArray messageToSend;
-    QByteArray messageToSend2;
-
-    messageToSend.append((char)0x02);
-    messageToSend.append((char)0x82);
-    serial->sendMessage(messageToSend);
-
-    messageToSend2.append((char)0x04);
-    messageToSend2.append((char)CMD_DAC_SET_VALUE);
-    messageToSend2.append((char)(65535 >> 8));
-    messageToSend2.append((char)65535);
-    serial->sendMessage(messageToSend2);
-}
-
-void InterfaceDSPIC::on_btnPwmWarm_clicked()
-{
-    qDebug() << "Warm PWM";
-    ui->teConsole->append("PWM 0V activation");
-
-    QByteArray messageToSend;
-
-    messageToSend.append((char)0x02);
-    messageToSend.append((char)0x81);
-
-
-    serial->sendMessage(messageToSend);
-}

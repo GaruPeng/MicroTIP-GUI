@@ -63,6 +63,26 @@ private slots:
 
     void on_btnPwmWarm_clicked();
 
+    //void on_ckbMuxInput_7_stateChanged(int arg1);
+
+    //void on_btnStartExperiment_clicked();
+
+    //void on_radMuxInput2_toggled(bool checked);
+
+    void on_btnDacGetValue2_clicked();
+
+    void on_btnDacSetValue2_clicked();
+
+    void on_btnDacGetValue3_clicked();
+
+    void on_btnDacGetValue4_clicked();
+
+    void on_btnDacSetValue3_clicked();
+
+    void on_btnDacSetValue4_clicked();
+
+    void on_btnDacReset_clicked();
+
 signals:
 
 
@@ -84,13 +104,13 @@ typedef enum
     CMD_DAC_SET_VALUE = 0x10,
     CMD_DAC_GET_VALUE = 0x11,
     CMD_MUX_SET_VALUE = 0x20,
-    CMD_PWM_SET_FREQ = 0x30,
-    CMD_PWM_GET_FREQ = 0x31,
-    CMD_PWM_SET_DUTY = 0x40,
-    CMD_PWM_GET_DUTY = 0x41,
-    CMD_PWM_STOP     = 0x80,
-    CMD_PWM_WARMUP   = 0x81,
-    CMD_PWM_START    = 0x82
+    CMD_PWM_SET_FREQ  = 0x30,
+    CMD_PWM_GET_FREQ  = 0x31,
+    CMD_PWM_SET_DUTY  = 0x40,
+    CMD_PWM_GET_DUTY  = 0x41,
+    CMD_PWM_STOP      = 0x80,
+    CMD_PWM_WARMUP    = 0x81,
+    CMD_PWM_START     = 0x82
 }CMD;
 
 #endif // INTERFACEDSPIC_H
