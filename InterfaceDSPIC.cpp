@@ -10,16 +10,30 @@ InterfaceDSPIC::InterfaceDSPIC(QWidget *parent) :
     updateSerialPorts();
     updateBaudrates();
 
-    haptic = new Haptic();
+
     timerPos = new QTimer;
     timerPos->setInterval(1);
-    timerPos->start();
-    connect(timerPos,SIGNAL(timeout()),this,SLOT(showPosMonitor()));
+    //timerPos->start();
+    connect(timerPos,SIGNAL(timeout()),this,SLOT(ReadBCIvalue()));
+
+    timerS = new QTimer;
+    timerS->setInterval(1);
+
+    timers = new QTimer;
+    timers->setInterval(1);
+
+    timerG = new QTimer;
+    timerG->setInterval(100);
+    //updateTimeG
+
+
+
 
     /* Create a scope window */
     scope = new Scope;
     scope->setGeometry(50,50,700,300);
-    //scope->show();
+    scope->show();
+    //connect(bci,SIGNAL(EEGvalue(double)),scope,SLOT(Record(double)));
 }
 
 
@@ -27,7 +41,7 @@ InterfaceDSPIC::~InterfaceDSPIC()
 {
     delete ui;
     delete serial;
-    delete haptic;
+
 }
 
 
@@ -40,16 +54,19 @@ void InterfaceDSPIC::init()
     ui->leMessageToSend->setEnabled(false);
     ui->btnSendMessage->setEnabled(false);
     ui->gpbDac->setEnabled(false);
+    ui->ckbDriveBCI->setEnabled(false);
+    ui->ckbReadBCI->setEnabled(false);
+    ui->lcdDacValue->setEnabled(false);
+    ui->hsDacValue->setEnabled(false);
+    ui->btnGrip->setEnabled(false);
+
+    ui->lcdGtime->display("00:00:00:000");
+
+    ui->lcdGtime->setPalette(Qt::black);
+    ui->lcdDacValue->setPalette(Qt::black);
+    ui->lcdAttention->setPalette(Qt::black);
 
 
-    /* Disable Position Monitor on startup */
-    ui->spbPosQW->setEnabled(false);
-    ui->spbPosQX->setEnabled(false);
-    ui->spbPosQY->setEnabled(false);
-    ui->spbPosQZ->setEnabled(false);
-    ui->spbPosX->setEnabled(false);
-    ui->spbPosY->setEnabled(false);
-    ui->spbPosZ->setEnabled(false);
 
 }
 
@@ -89,6 +106,8 @@ void InterfaceDSPIC::on_btnOpenCommunicationWithMicrocontroller_clicked()
 
     pwm = new PWM();
 
+    bci = new BCI();
+
     ui->btnOpenCommunicationWithMicrocontroller->setEnabled(false);
     ui->btnCloseCommunicationWithMicrocontroller->setEnabled(true);
     ui->btnRefreshSerialNames->setEnabled(false);
@@ -102,6 +121,7 @@ void InterfaceDSPIC::on_btnOpenCommunicationWithMicrocontroller_clicked()
 
     connect(serial, SIGNAL(workDone(QByteArray)), this, SLOT(on_newMessage(QByteArray)));
 
+
 }
 
 void InterfaceDSPIC::on_btnCloseCommunicationWithMicrocontroller_clicked()
@@ -109,6 +129,7 @@ void InterfaceDSPIC::on_btnCloseCommunicationWithMicrocontroller_clicked()
     delete serial;
     delete dac;
     delete mux;
+
 
     ui->btnOpenCommunicationWithMicrocontroller->setEnabled(true);
     ui->btnCloseCommunicationWithMicrocontroller->setEnabled(false);
@@ -188,6 +209,12 @@ void InterfaceDSPIC::on_newMessage(QByteArray message)
     }
 }
 
+
+
+
+
+
+/*--------------------DAC------------------------------*/
 
 void InterfaceDSPIC::on_btnDacGetValue_clicked()
 {
@@ -305,6 +332,17 @@ void InterfaceDSPIC::on_btnPwmSetDuty_clicked()
     }
 }
 
+void InterfaceDSPIC::on_btnExit_clicked()
+{
+    exit(1);
+}
+
+
+
+
+
+
+/*--------------------Mux------------------------------*/
 
 void InterfaceDSPIC::on_btgMux_buttonClicked(int id)
 {
@@ -320,141 +358,10 @@ void InterfaceDSPIC::on_btgMux_buttonClicked(int id)
 }
 
 
-void InterfaceDSPIC::on_btnOpenHapticComm_clicked()
-{
-    QString cr;
-    cr = QString(haptic->OpenCommunication());
-    ui->teConsole->append("Haptic status : " + cr);
-}
+/*--------------------Haptic---------------------------*/
 
 
-void InterfaceDSPIC::on_btnCloseHapticComm_clicked()
-{
-    QString cr;
-    cr = QString(haptic->CloseCommunication());
-    ui->teConsole->append("Haptic status : " + cr);
-}
-
-
-void InterfaceDSPIC::on_btnStartHapticSim_clicked()
-{
-    QString cr;
-    //ui->btnHapticSetForce->setEnabled(false);
-    cr = QString(haptic->StartSpringSim());
-    ui->teConsole->append("Haptic status : " + cr);
-}
-
-void InterfaceDSPIC::on_btnStopHapticSim_clicked()
-{
-    QString cr;
-    //ui->btnHapticSetForce->setEnabled(true);
-    cr = QString(haptic->StopSpringSim());
-    ui->teConsole->append("Haptic status : " + cr);
-}
-
-
-void InterfaceDSPIC::on_btnExit_clicked()
-{
-    exit(1);
-}
-
-
-void InterfaceDSPIC::on_btnHapticSetForce_clicked()
-{
-    QString cr;
-    float newforce[6];
-    newforce[0] = (float)0.001*ui->spbAxe1->value();
-    newforce[1] = (float)0.001*ui->spbAxe2->value();
-    newforce[2] = (float)0.001*ui->spbAxe3->value();
-    newforce[3] = (float)0.001*ui->spbAxe4->value();
-    newforce[4] = (float)0.001*ui->spbAxe5->value();
-    newforce[5] = (float)0.001*ui->spbAxe6->value();
-
-    cr = QString(haptic->SetForce(newforce));
-    ui->teConsole->append("Haptic status : " + cr);
-
-}
-
-
-void InterfaceDSPIC::on_btnHapticDefaultForce_clicked()
-{
-    /* Set the default forces and torques */
-    ui->spbAxe1->setValue(100); /* fx */
-    ui->spbAxe2->setValue(100); /* fy */
-    ui->spbAxe3->setValue(100); /* fz */
-    ui->spbAxe4->setValue(0);   /* cx */
-    ui->spbAxe5->setValue(0);   /* cy */
-    ui->spbAxe6->setValue(0);   /* cz */
-}
-
-
-void InterfaceDSPIC::on_btnHapticLoopForce_clicked()
-{
-    QString cr;
-
-    float newforce[6];
-    for(int i = 0 ; i < 6 ; i++)
-    {
-        newforce[i] = 0;
-    }
-
-    /* Be careful to change the value */
-    /* It is dangerous if the forces increases too fast */
-    for(int ii = 0 ; ii < 200 ; ii+=10)
-    {
-        newforce[0] = (float)0.001*ii;
-        //cr = QString(haptic->SetForce(newforce));
-        cr = QString("New force: %1, %2, %3, %4, %5, %6").arg(newforce[0]).arg(newforce[1])
-                .arg(newforce[2]).arg(newforce[3]).arg(newforce[4]).arg(newforce[5]);
-        ui->teConsole->append("Haptic status : " + cr);
-
-        /* Wait 1 sec for each loop */
-        QTime t;
-        t.start();
-        while(t.elapsed()<1000)
-            QCoreApplication::processEvents();
-    }
-}
-
-
-void InterfaceDSPIC::showPosMonitor()
-{
-    ui->spbPosX->setValue(haptic->position[0]);
-    ui->spbPosY->setValue(haptic->position[1]);
-    ui->spbPosZ->setValue(haptic->position[2]);
-    ui->spbPosQX->setValue(haptic->position[3]);
-    ui->spbPosQY->setValue(haptic->position[4]);
-    ui->spbPosQZ->setValue(haptic->position[5]);
-    ui->spbPosQW->setValue(haptic->position[6]);
-}
-
-
-void InterfaceDSPIC::on_ckbPosSet_clicked(bool checked)
-{
-    if(checked==true)
-    {
-        ui->spbPosQW->setEnabled(true);
-        ui->spbPosQX->setEnabled(true);
-        ui->spbPosQY->setEnabled(true);
-        ui->spbPosQZ->setEnabled(true);
-        ui->spbPosX->setEnabled(true);
-        ui->spbPosY->setEnabled(true);
-        ui->spbPosZ->setEnabled(true);
-    }
-
-    else
-    {
-        ui->spbPosQW->setEnabled(false);
-        ui->spbPosQX->setEnabled(false);
-        ui->spbPosQY->setEnabled(false);
-        ui->spbPosQZ->setEnabled(false);
-        ui->spbPosX->setEnabled(false);
-        ui->spbPosY->setEnabled(false);
-        ui->spbPosZ->setEnabled(false);
-    }
-}
-
-
+/*--------------------PWM------------------------------*/
 
 void InterfaceDSPIC::on_btnPwmReset_clicked()
 {
@@ -484,8 +391,8 @@ void InterfaceDSPIC::on_btnPwmRun_clicked()
 
     messageToSend2.append((char)0x04);
     messageToSend2.append((char)CMD_DAC_SET_VALUE);
-    messageToSend2.append((char)(65535 >> 8));
-    messageToSend2.append((char)65535);
+    messageToSend2.append((char)(45874 >> 8));
+    messageToSend2.append((char)45874);
     serial->sendMessage(messageToSend2);
 }
 
@@ -501,4 +408,287 @@ void InterfaceDSPIC::on_btnPwmWarm_clicked()
 
 
     serial->sendMessage(messageToSend);
+}
+
+
+
+
+
+
+/*--------------------BCI--------------------------*/
+
+void InterfaceDSPIC::on_btnConnectBCI_clicked()
+{
+    ui->teConsole->append(bci->OpenBCIconnection());
+    ui->ckbReadBCI->setEnabled(true);
+
+
+}
+
+void InterfaceDSPIC::on_btnDIsconnectBCI_clicked()
+{
+    ui->teConsole->append(bci->CloseBCIconnection());
+    ui->ckbReadBCI->setEnabled(false);
+}
+
+
+
+void InterfaceDSPIC::on_ckbReadBCI_clicked(bool checked)
+{
+    if(checked==1)
+    {
+        ui->btnConnectBCI->setEnabled(false);
+        ui->btnDIsconnectBCI->setEnabled(false);
+        ui->ckbDriveBCI->setEnabled(true);
+        timerPos->start();
+    }
+
+    if(checked==0)
+    {
+        ui->btnConnectBCI->setEnabled(true);
+        ui->btnDIsconnectBCI->setEnabled(true);
+        ui->ckbDriveBCI->setEnabled(false);
+        timerPos->stop();
+    }
+
+}
+
+void InterfaceDSPIC::ReadBCIvalue()
+{
+    bci->ReadBCItest();
+
+    ui->lcdAttention->display(bci->attenlvl);
+
+}
+
+void InterfaceDSPIC::DriveBCIvalue()
+{
+    double attOuput;
+    attOuput = (double) bci->attenlvl;
+
+
+    if (attOuput > 80){
+        ui->leDacValue->setText(QString::number(45874));
+    }
+    if (attOuput < 30){
+        ui->leDacValue->setText(QString::number(0));
+    }
+    if(attOuput>30 && attOuput<80){
+        attOuput = (attOuput-30) *45874/50;
+        ui->leDacValue->setText(QString::number((uint16_t) attOuput));
+    }
+
+
+}
+
+
+void InterfaceDSPIC::on_ckbDriveBCI_clicked(bool checked)
+{
+    if(checked==1)
+    {
+        ui->ckbReadBCI->setEnabled(false);
+        connect(timerPos,SIGNAL(timeout()),this,SLOT(DriveBCIvalue()));
+        connect(timerPos,SIGNAL(timeout()),this,SLOT(on_btnDacSetValue_clicked()));
+
+    }
+
+    if(checked==0)
+    {
+        ui->ckbReadBCI->setEnabled(true);
+        disconnect(timerPos,SIGNAL(timeout()),this,SLOT(DriveBCIvalue()));
+        disconnect(timerPos,SIGNAL(timeout()),this,SLOT(on_btnDacSetValue_clicked()));
+
+    }
+}
+
+
+
+
+
+
+/*--------------------SquareRun--------------------------*/
+
+void InterfaceDSPIC::on_btnSquareRun_clicked()
+{
+    ui->lcdDacValue->setEnabled(true);
+    ui->hsDacValue->setEnabled(true);
+    connect(timerS,SIGNAL(timeout()),this,SLOT(SquareUP()));
+    connect(timers,SIGNAL(timeout()),this,SLOT(SquareDown()));
+
+    timerS->start(5000);
+
+
+
+}
+
+void InterfaceDSPIC::on_btnSquareStop_clicked()
+{
+    timerS->stop();
+    timers->stop();
+    disconnect(timerS,SIGNAL(timeout()),this,SLOT(SquareUP()));
+    disconnect(timers,SIGNAL(timeout()),this,SLOT(SquareDown()));
+    ui->lcdDacValue->setEnabled(false);
+    ui->hsDacValue->setEnabled(false);
+
+    ui->leDacValue->setText(QString::number(32767));
+    ui->btnDacSetValue->click();
+}
+
+
+void InterfaceDSPIC::SquareUP()
+{
+    double valueUP;
+    valueUP = (double)ui->hsDacValue->value()/25*32767+32767;
+    ui->leDacValue->setText(QString::number((int)valueUP));
+    ui->btnDacSetValue->click();
+    timers->start(5000);
+
+}
+
+void InterfaceDSPIC::SquareDown()
+{
+    double valueDOWN;
+    valueDOWN = 32767-(double)ui->hsDacValue->value()/25*32767;
+    ui->leDacValue->setText(QString::number((int)valueDOWN));
+    ui->btnDacSetValue->click();
+    timerS->start(5000);
+}
+
+void InterfaceDSPIC::on_hsDacValue_valueChanged(int value)
+{
+    double voltage;
+    voltage = ((double) value)/10;
+    ui->lcdDacValue->display(voltage);
+    //ui->leDacValue->setText(QString::number((int)voltage/25*65535));
+}
+
+
+
+
+
+
+
+/*--------------------Grip-----------------------------*/
+
+
+void InterfaceDSPIC::on_ckbGrip_clicked(bool checked)
+{
+    if(checked==1){
+        //ui->lcdDacValue->setEnabled(false);
+        //ui->hsDacValue->setEnabled(false);
+
+        ui->leDacValue->setText(QString::number(13106)); // -1.5V open the gripper
+        ui->btnDacSetValue->click();
+
+        ui->btnGrip->setEnabled(true);
+
+        ui->tbGrip->append("Open the gripper at the beginning");
+
+
+    }
+
+    if(checked==0){
+        //ui->lcdDacValue->setEnabled(true);
+        //ui->hsDacValue->setEnabled(true);
+
+
+        ui->btnGrip->setEnabled(false);
+
+        timerG->stop();
+
+        disconnect(timerG,SIGNAL(timeout()),this,SLOT(updateTimeG()));
+
+        ui->leDacValue->setText(QString::number(32767)); // go back to 0V
+        ui->btnDacSetValue->click();
+
+        ui->tbGrip->clear();
+
+    }
+}
+
+
+void InterfaceDSPIC::on_btnGrip_clicked()
+{
+    EXPtime.start();
+    timerG->start();
+
+    connect(timerG,SIGNAL(timeout()),this,SLOT(updateTimeG()));
+
+
+}
+
+void InterfaceDSPIC::updateTimeG()
+{
+    int stateT = 0;
+    QTime showTime(0,0,0,0);
+    QString timeStr;
+    showTime = showTime.addMSecs(EXPtime.elapsed());
+    timeStr = showTime.toString("hh:mm:ss:zzz");
+    ui->lcdGtime->display(timeStr);
+
+    // wait 5 sec
+    if(EXPtime.hasExpired(5000)==1)
+    {
+        stateT = 1;
+
+        if(EXPtime.hasExpired(45000)==1){ // close the gripper for 40 sec
+            stateT = 2;
+
+            if(EXPtime.hasExpired(60000)==1){ // reopen the gripper for 15 sec
+                stateT = 3;
+
+                if(EXPtime.hasExpired(62000)==1){  // go to the neutral state
+                    stateT = 4;
+
+                    if(EXPtime.hasExpired(70000)){
+                        stateT = 5;
+                    }
+                }
+            }
+        }
+    }
+
+    switch (stateT) {
+    case 1:
+        if(dac->getValue()!=58981){
+            ui->leDacValue->setText(QString::number(58981)); // +2.0V close the gripper
+            ui->btnDacSetValue->click();
+            ui->tbGrip->append("Close the gripper at 5 sec");
+        }
+        break;
+    case 2:
+        if(dac->getValue()!=13106){
+            ui->leDacValue->setText(QString::number(13106)); // -1.5V open the gripper
+            ui->btnDacSetValue->click();
+            ui->tbGrip->append("Open the gripper at 45 sec");
+        }
+        break;
+    case 3:
+        if(dac->getValue()!=45874){
+            ui->leDacValue->setText(QString::number(45874)); // +1.0V close the gripper
+            ui->btnDacSetValue->click();
+            ui->tbGrip->append("Go back to neutral state");
+        }
+        break;
+    case 4:
+        if(dac->getValue()!=32767){
+            ui->leDacValue->setText(QString::number(32767)); // +0.0V open the gripper
+            ui->btnDacSetValue->click();
+        }
+        break;
+    case 5:
+        timerG->stop();
+        break;
+    default:
+        break;
+    }
+
+
+
+
+}
+
+void InterfaceDSPIC::GripExp()
+{
+
 }

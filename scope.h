@@ -20,7 +20,7 @@ public:
     QList<double> recordingData; // data list for whole recorded signal
 
 protected:
-    void timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE; // only for testing
+    //void timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE; // only for testing
 
 private:
     void dataReceived(double value);
@@ -42,6 +42,7 @@ public slots:
     void Record(double value);
     void SaveToFile();
     void EnableReceive(bool chk);
+
 
 };
 

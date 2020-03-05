@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QTime>
 #include <QTimer>
+#include <QElapsedTimer>
 
 #include "SerialCommunication.h"
 #include "Dac.h"
@@ -12,6 +13,7 @@
 #include "haptic.h"
 #include "scope.h"
 #include "Pwm.h"
+#include "bci.h"
 
 
 namespace Ui {
@@ -42,19 +44,21 @@ public slots:
     void on_btnPwmGetDuty_clicked();
     void on_btnPwmSetDuty_clicked();
     void on_btgMux_buttonClicked(int id);
+    void ReadBCIvalue();
+    void DriveBCIvalue();
 
-    void on_btnOpenHapticComm_clicked();
-    void on_btnCloseHapticComm_clicked();
-    void on_btnStartHapticSim_clicked();
-    void on_btnStopHapticSim_clicked();
+    void SquareUP();
+    void SquareDown();
+
+    void updateTimeG();
+    void GripExp();
+
+
+
+
 
 private slots:
     void on_btnExit_clicked();
-    void on_btnHapticSetForce_clicked();
-    void on_btnHapticDefaultForce_clicked();
-    void on_btnHapticLoopForce_clicked();
-    void showPosMonitor();
-    void on_ckbPosSet_clicked(bool checked);
 
 
     void on_btnPwmReset_clicked();
@@ -63,7 +67,32 @@ private slots:
 
     void on_btnPwmWarm_clicked();
 
+    void on_btnConnectBCI_clicked();
+
+    void on_btnDIsconnectBCI_clicked();
+
+    void on_ckbReadBCI_clicked(bool checked);
+
+    void on_ckbDriveBCI_clicked(bool checked);
+
+
+
+
+
+    void on_btnSquareRun_clicked();
+
+    void on_btnSquareStop_clicked();
+
+    void on_hsDacValue_valueChanged(int value);
+
+    void on_ckbGrip_clicked(bool checked);
+
+    void on_btnGrip_clicked();
+
+
+
 signals:
+    void attenChange(int);
 
 
 private:
@@ -71,10 +100,14 @@ private:
     SerialCommunication *serial;
     Dac *dac;
     Multiplexer *mux;
-    Haptic *haptic;
     QTimer *timerPos;
+    QTimer *timerS;
+    QTimer *timers;
+    QTimer *timerG;
     Scope *scope;
     PWM *pwm;
+    BCI *bci;
+    QElapsedTimer EXPtime;
 
 
 };

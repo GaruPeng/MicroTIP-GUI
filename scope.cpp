@@ -54,15 +54,15 @@ Scope::~Scope()
 {}
 
 
-void Scope::timerEvent(QTimerEvent *event)
-{
-    /* Generate continuous random data for simulation */
-    /* Should be deleted if there is a real signal */
-    if (event->timerId() == timerId) {
-        double newData = ((qrand() % (maxY + 1))-(maxY/2)) *2 *0.001;
-        dataReceived(newData);
-    }
-}
+//void Scope::timerEvent(QTimerEvent *event)
+//{
+//    /* Generate continuous random data for simulation */
+//    /* Should be deleted if there is a real signal */
+//    if (event->timerId() == timerId) {
+//        //double newData = ((qrand() % (maxY + 1))-(maxY/2)) *2 *0.001;
+//        dataReceived();
+//    }
+//}
 
 
 void Scope::dataReceived(double value)

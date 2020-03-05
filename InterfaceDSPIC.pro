@@ -21,7 +21,8 @@ SOURCES += \
     Multiplexer.cpp \
     haptic.cpp \
     scope.cpp \
-    Pwm.cpp
+    Pwm.cpp \
+    bci.cpp
 
 HEADERS  += \
     InterfaceDSPIC.h \
@@ -31,15 +32,28 @@ HEADERS  += \
     VirtuoseAPI.h \
     haptic.h \
     scope.h \
-    Pwm.h
+    Pwm.h \
+    thinkgear.h \
+    bci.h
 
 FORMS    += InterfaceDSPIC.ui
 
 DISTFILES += \
     virtuoseAPI.dll \
-    virtuoseDLL.lib
+    virtuoseDLL.lib \
+    thinkgear.dll \
+    thinkgear.lib
+
 
 win32: LIBS += -L$$PWD/./ -lvirtuoseDLL
 
+
+
+
+
+unix|win32: LIBS += -L$$PWD/./ -lthinkgear
+
 INCLUDEPATH += $$PWD/.
 DEPENDPATH += $$PWD/.
+
+LIBS += "D:\LISV\microtip\MicroTIP-GUI-BCI\thinkgear.lib"
